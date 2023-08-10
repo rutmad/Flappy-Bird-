@@ -1,1 +1,1 @@
-something;
+var board = document.getElementById(board);

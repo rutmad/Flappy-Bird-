@@ -1,1 +1,1 @@
-something;
+const board = document.getElementById(board);
