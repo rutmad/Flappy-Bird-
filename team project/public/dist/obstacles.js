@@ -1,8 +1,7 @@
 var canvas = document.getElementById("gameCanvas");
-var ctx = canvas.getContext("2d");
+var canvasContext = canvas.getContext("2d");
 var PIPE_WIDTH = 50;
 var PIPE_SPACING = 150;
-var GRAVITY = 0.5;
 var Pipe = /** @class */ (function () {
     function Pipe(x, y, height) {
         this.x = x;
@@ -10,8 +9,8 @@ var Pipe = /** @class */ (function () {
         this.height = height;
     }
     Pipe.prototype.draw = function () {
-        ctx.fillStyle = "green";
-        ctx.fillRect(this.x, this.y, PIPE_WIDTH, this.height);
+        canvasContext.fillStyle = "green";
+        canvasContext.fillRect(this.x, this.y, PIPE_WIDTH, this.height);
     };
     return Pipe;
 }());
@@ -23,3 +22,4 @@ function createPipe() {
     pipes.push(new Pipe(canvas.width, 0, height));
     pipes.push(new Pipe(canvas.width, height + PIPE_SPACING, canvas.height - (height + PIPE_SPACING)));
 }
+createPipe();

@@ -1,9 +1,8 @@
 const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
-const ctx = canvas.getContext("2d");
+const canvasContext = canvas.getContext("2d");
 
 const PIPE_WIDTH = 50;
 const PIPE_SPACING = 150;
-const GRAVITY = 0.5;
 
 class Pipe {
   x: number;
@@ -17,8 +16,8 @@ class Pipe {
   }
 
   draw() {
-    ctx!.fillStyle = "green";
-    ctx!.fillRect(this.x, this.y, PIPE_WIDTH, this.height);
+    canvasContext!.fillStyle = "green";
+    canvasContext!.fillRect(this.x, this.y, PIPE_WIDTH, this.height);
   }
 }
 
@@ -38,3 +37,5 @@ function createPipe() {
     )
   );
 }
+
+createPipe();
