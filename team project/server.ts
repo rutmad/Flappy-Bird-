@@ -5,16 +5,21 @@ import usersRoute from "./API/userRoute";
 
 dotenv.config();
 
+const uri: string | undefined = process.env.MONGOOSE_URI + "flappybird";
+
 const app = express();
 
 app.use(express.json());
 app.use(express.static("./client"));
 
-mongoose.connect(process.env.MONGOOSE_URI || "", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
+if (uri) {
+  mongoose
+    .connect(uri)
+    .then(() => console.log("DB connected"))
+    .catch((err) => console.log("DB error :", err));
+} else {
+  console.log("No URI");
+}
 
 app.use("/api/", usersRoute);
 
