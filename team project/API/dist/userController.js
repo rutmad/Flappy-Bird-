@@ -39,25 +39,29 @@ exports.__esModule = true;
 exports.getUser = exports.login = exports.addUser = void 0;
 var userModel_1 = require("./userModel");
 var bcrypt_1 = require("bcrypt");
-// import jwt from "jsonwebtoken";
 var jsonwebtoken_1 = require("jsonwebtoken");
 var secret = "mysecret";
 exports.addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, hashedPassword, error_1;
+    var _a, email, password, userDB, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
                 _a = req.body, email = _a.email, password = _a.password;
-                return [4 /*yield*/, bcrypt_1["default"].hash(password, 10)];
+                console.log(email, password);
+                return [4 /*yield*/, userModel_1["default"].create({
+                        email: email,
+                        password: password
+                    })];
             case 1:
-                hashedPassword = _b.sent();
+                userDB = _b.sent();
+                console.log(userDB);
                 res.status(200).send({ ok: true });
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _b.sent();
-                console.error(error_1);
-                res.status(500).send("Error creating user");
+                console.log(error_1);
+                res.status(500).send("did not get data");
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

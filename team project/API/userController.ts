@@ -1,6 +1,5 @@
 import UserModel from "./userModel";
 import bcrypt from "bcrypt";
-// import jwt from "jsonwebtoken";
 import jsonwebtoken from "jsonwebtoken";
 
 const secret: string = "mysecret";
@@ -8,13 +7,17 @@ const secret: string = "mysecret";
 export const addUser = async (req: any, res: any) => {
   try {
     const { email, password } = req.body;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(email, password);
+    const userDB = await UserModel.create({
+      email,
+      password,
+    });
+    console.log(userDB);
 
     res.status(200).send({ ok: true });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Error creating user");
+    console.log(error);
+    res.status(500).send("did not get data");
   }
 };
 
