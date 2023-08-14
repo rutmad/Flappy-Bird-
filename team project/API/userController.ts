@@ -18,13 +18,11 @@ export const addUser = async (req: any, res: any) => {
     res.status(500).send("did not get data");
   }
 };
-// Login
 export const login = async (req: any, res: any) => {
   try {
     const { name, password } = req.body;
     console.log(name, password);
 
-    //add users to DB;
     const userDB = await UserModel.findOne({ name, password });
 
     if (!userDB) throw new Error("Username or password are incorrect");
