@@ -1,8 +1,7 @@
 import express from "express";
 import mongoose, { Schema } from "mongoose";
 import * as dotenv from "dotenv";
-import usersRoute from "./API/loginRoute";
-import cookieParser from "cookie-parser";
+import usersRoute from "./API/userRoute";
 
 dotenv.config();
 
@@ -18,13 +17,13 @@ if (uri) {
 }
 
 const app = express();
+
 app.use(express.json());
-app.use(cookieParser());
 
 app.use(express.static("./client"));
 
 app.use("/api/", usersRoute);
 
 app.listen(3001, () => {
-  console.log("server listen on port 3001");
+  console.log("server listen on port 3000");
 });
