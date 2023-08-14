@@ -1,36 +1,49 @@
 import UserModel from "./userModel";
-import jwt from "jwt-simple";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 const secret: string = "mysecret";
 
 export const addUser = async (req: any, res: any) => {
   try {
     const { name, password } = req.body;
-    console.log(name, password);
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const userDB = await UserModel.create({
       name,
-      password,
+      password: hashedPassword,
     });
-    console.log(userDB);
 
     res.status(200).send({ ok: true });
   } catch (error) {
-    console.log(error);
-    res.status(500).send("did not get data");
+    console.error(error);
+    res.status(500).send("Error creating user");
   }
 };
+
 export const login = async (req: any, res: any) => {
   try {
     const { name, password } = req.body;
-    console.log(name, password);
 
-    const userDB = await UserModel.findOne({ name, password });
+    const userDB = await UserModel.findOne({ name });
 
-    if (!userDB) throw new Error("Username or password are incorrect");
+    if (!userDB) {
+      throw new Error("Username or password are incorrect");
+    }
 
-    const token = jwt.encode({ userId: userDB._id, role: "public" }, secret);
-    console.log(token);
+    const passwordMatch = await bcrypt.compare(password, userDB.password);
+    if (!passwordMatch) {
+      throw new Error("Username or password are incorrect");
+    }
 
-    res.cookie("user", token, { maxAge: 500000000, httpOnly: true });
+    const token = jwt.sign({ userId: userDB._id, role: "public" }, secret);
+
+    res.cookie("user", token, {
+      maxAge: 500000000,
+      httpOnly: true,
+      secure: true,
+    });
 
     res.status(201).send({ ok: true });
   } catch (error: any) {
@@ -43,11 +56,18 @@ export const getUser = async (req: any, res: any) => {
   try {
     const { user } = req.cookies;
 
-    const decoded = jwt.decode(user, secret);
-    console.log(decoded);
-    const { userId, role } = decoded;
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
 
-    const userDB: any = await UserModel.findById(userId);
+    const decoded = jwt.verify(user, secret);
+    const { userId } = decoded;
+
+    const userDB = await UserModel.findById(userId);
+
+    if (!userDB) {
+      throw new Error("User not found");
+    }
 
     res.send({ ok: true, user: userDB });
   } catch (error: any) {

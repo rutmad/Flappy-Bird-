@@ -11,12 +11,9 @@
     <div class="container">
       <h1>Registration</h1>
 
-      <form action="/api/add-user" method="POST">
+      <form id="registration-form">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required />
-
-        <label for="surname">Surname:</label>
-        <input type="text" id="surname" name="surname" required />
 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required />
@@ -28,5 +25,7 @@
       </form>
       <p>Already have an account? <a href="login.html">Login</a></p>
     </div>
+
+    <script src="./dist/index.js" defer></script>
   </body>
 </html>
