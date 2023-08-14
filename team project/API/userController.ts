@@ -1,6 +1,7 @@
 import UserModel from "./userModel";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
+import jsonwebtoken from "jsonwebtoken";
 
 const secret: string = "mysecret";
 
@@ -32,12 +33,16 @@ export const login = async (req: any, res: any) => {
       throw new Error("Username or password are incorrect");
     }
 
-    const passwordMatch = await bcrypt.compare(password, userDB.password);
+    const passwordMatch = await bcrypt.compare(password, userDB.password || "");
+
     if (!passwordMatch) {
       throw new Error("Username or password are incorrect");
     }
 
-    const token = jwt.sign({ userId: userDB._id, role: "public" }, secret);
+    const token = jsonwebtoken.sign(
+      { userId: userDB._id, role: "public" },
+      secret
+    );
 
     res.cookie("user", token, {
       maxAge: 500000000,
@@ -60,10 +65,13 @@ export const getUser = async (req: any, res: any) => {
       throw new Error("User not authenticated");
     }
 
-    const decoded = jwt.verify(user, secret);
-    const { userId } = decoded;
+    const decoded = jsonwebtoken.verify(user, secret) as { userId: string };
 
-    const userDB = await UserModel.findById(userId);
+    if (!decoded.userId) {
+      throw new Error("User not authenticated");
+    }
+
+    const userDB = await UserModel.findById(decoded.userId);
 
     if (!userDB) {
       throw new Error("User not found");

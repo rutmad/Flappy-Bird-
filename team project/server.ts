@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import usersRoute from "./API/userRoute";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 

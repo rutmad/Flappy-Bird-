@@ -39,6 +39,7 @@ exports.__esModule = true;
 exports.getUser = exports.login = exports.addUser = void 0;
 var userModel_1 = require("./userModel");
 var bcrypt_1 = require("bcrypt");
+// import jwt from "jsonwebtoken";
 var jsonwebtoken_1 = require("jsonwebtoken");
 var secret = "mysecret";
 exports.addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -81,7 +82,7 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 if (!userDB) {
                     throw new Error("Username or password are incorrect");
                 }
-                return [4 /*yield*/, bcrypt_1["default"].compare(password, userDB.password)];
+                return [4 /*yield*/, bcrypt_1["default"].compare(password, userDB.password || "")];
             case 2:
                 passwordMatch = _b.sent();
                 if (!passwordMatch) {
@@ -105,7 +106,7 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 exports.getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, decoded, userId, userDB, error_3;
+    var user, decoded, userDB, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -115,8 +116,10 @@ exports.getUser = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     throw new Error("User not authenticated");
                 }
                 decoded = jsonwebtoken_1["default"].verify(user, secret);
-                userId = decoded.userId;
-                return [4 /*yield*/, userModel_1["default"].findById(userId)];
+                if (!decoded.userId) {
+                    throw new Error("User not authenticated");
+                }
+                return [4 /*yield*/, userModel_1["default"].findById(decoded.userId)];
             case 1:
                 userDB = _a.sent();
                 if (!userDB) {
