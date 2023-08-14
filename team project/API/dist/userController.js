@@ -43,40 +43,34 @@ var bcrypt_1 = require("bcrypt");
 var jsonwebtoken_1 = require("jsonwebtoken");
 var secret = "mysecret";
 exports.addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, password, hashedPassword, userDB, error_1;
+    var _a, email, password, hashedPassword, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 3, , 4]);
-                _a = req.body, name = _a.name, password = _a.password;
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, email = _a.email, password = _a.password;
                 return [4 /*yield*/, bcrypt_1["default"].hash(password, 10)];
             case 1:
                 hashedPassword = _b.sent();
-                return [4 /*yield*/, userModel_1["default"].create({
-                        name: name,
-                        password: hashedPassword
-                    })];
-            case 2:
-                userDB = _b.sent();
                 res.status(200).send({ ok: true });
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 3];
+            case 2:
                 error_1 = _b.sent();
                 console.error(error_1);
                 res.status(500).send("Error creating user");
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, password, userDB, passwordMatch, token, error_2;
+    var _a, email, password, userDB, passwordMatch, token, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 3, , 4]);
-                _a = req.body, name = _a.name, password = _a.password;
-                return [4 /*yield*/, userModel_1["default"].findOne({ name: name })];
+                _a = req.body, email = _a.email, password = _a.password;
+                return [4 /*yield*/, userModel_1["default"].findOne({ email: email })];
             case 1:
                 userDB = _b.sent();
                 if (!userDB) {

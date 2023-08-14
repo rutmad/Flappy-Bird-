@@ -4,11 +4,13 @@ var express_1 = require("express");
 var mongoose_1 = require("mongoose");
 var dotenv_1 = require("dotenv");
 var userRoute_1 = require("./API/userRoute");
+var cookie_parser_1 = require("cookie-parser");
 dotenv_1["default"].config();
 var uri = process.env.MONGOOSE_URI + "flappybird";
 var app = express_1["default"]();
 app.use(express_1["default"].json());
 app.use(express_1["default"].static("./client"));
+app.use(cookie_parser_1["default"]());
 if (uri) {
     mongoose_1["default"]
         .connect(uri)

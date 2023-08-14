@@ -7,14 +7,9 @@ const secret: string = "mysecret";
 
 export const addUser = async (req: any, res: any) => {
   try {
-    const { name, password } = req.body;
+    const { email, password } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const userDB = await UserModel.create({
-      name,
-      password: hashedPassword,
-    });
 
     res.status(200).send({ ok: true });
   } catch (error) {
@@ -25,9 +20,9 @@ export const addUser = async (req: any, res: any) => {
 
 export const login = async (req: any, res: any) => {
   try {
-    const { name, password } = req.body;
+    const { email, password } = req.body;
 
-    const userDB = await UserModel.findOne({ name });
+    const userDB = await UserModel.findOne({ email });
 
     if (!userDB) {
       throw new Error("Username or password are incorrect");
