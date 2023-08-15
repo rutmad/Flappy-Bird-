@@ -1,3 +1,5 @@
+import { login } from "../API/userController";
+
 interface User {
   name: string;
   password: string;
@@ -12,7 +14,7 @@ function handleGetUsers() {
       .then((res) => res.json())
       .then(({ users }) => {
         try {
-          if (!users) throw new Error("didnt find users");
+          if (!users) throw new Error("didn't find users");
           console.log(users);
           renderUsers(users);
         } catch (error) {
@@ -42,16 +44,26 @@ function renderUsers(users: Array<User>) {
   }
 }
 
+
+document.addEventListener("DOMContentLoaded", () => {
+  const registrationMessage = document.getElementById(
+    "registrationMessage"
+  ) as HTMLElement;
+
+  
+  if (!login) {
+    registrationMessage.style.display = "block";
+  }
+});
+
 function handleAddUser(ev: any) {
   try {
     ev.preventDefault();
     const name = ev.target.elements.name.value;
-    const email = ev.target.element.email.value;
     const password = ev.target.elements.password.value;
     if (!name) throw new Error("No name");
-    if (!email) throw new Error("No email");
     if (!password) throw new Error("No password");
-    const newUser: any = { name, email, password };
+    const newUser: any = { name, password };
 
     fetch("/api/add-user", {
       method: "POST",
@@ -61,9 +73,11 @@ function handleAddUser(ev: any) {
       },
       body: JSON.stringify(newUser),
     })
-      .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        if (data.ok) {
+          window.location.href = "./index.html";
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -93,7 +107,16 @@ function handleLogin(ev: any) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data.ok) {
+
+          window.location.href = "./gameLevel.html";
+        } else {
+          const loginErrorMessage =
+            document.getElementById("loginErrorMessage");
+          if (loginErrorMessage) {
+            loginErrorMessage.style.display = "block";
+          }
+        }
       })
       .catch((error) => {
         console.error(error);
