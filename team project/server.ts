@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import usersRoute from "./API/userRoute";
+import usersRoute from "./API/usersRoute";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -9,10 +9,10 @@ dotenv.config();
 const uri: string | undefined = process.env.MONGOOSE_URI + "flappybird";
 
 const app = express();
-
 app.use(express.json());
-app.use(express.static("./client"));
 app.use(cookieParser());
+
+app.use(express.static("./client"));
 
 if (uri) {
   mongoose
