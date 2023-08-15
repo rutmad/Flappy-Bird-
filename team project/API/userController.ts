@@ -1,13 +1,15 @@
 import UserModel from "./userModel";
-import jwt from "jwt-simple";
+import bcrypt from "bcrypt";
+import jsonwebtoken from "jsonwebtoken";
+
 const secret: string = "mysecret";
 
 export const addUser = async (req: any, res: any) => {
   try {
-    const { name, password } = req.body;
-    console.log(name, password);
+    const { email, password } = req.body;
+    console.log(email, password);
     const userDB = await UserModel.create({
-      name,
+      email,
       password,
     });
     console.log(userDB);
@@ -18,19 +20,33 @@ export const addUser = async (req: any, res: any) => {
     res.status(500).send("did not get data");
   }
 };
+
 export const login = async (req: any, res: any) => {
   try {
-    const { name, password } = req.body;
-    console.log(name, password);
+    const { email, password } = req.body;
 
-    const userDB = await UserModel.findOne({ name, password });
+    const userDB = await UserModel.findOne({ email });
 
-    if (!userDB) throw new Error("Username or password are incorrect");
+    if (!userDB) {
+      throw new Error("Username or password are incorrect");
+    }
 
-    const token = jwt.encode({ userId: userDB._id, role: "public" }, secret);
-    console.log(token);
+    const passwordMatch = await bcrypt.compare(password, userDB.password || "");
 
-    res.cookie("user", token, { maxAge: 500000000, httpOnly: true });
+    if (!passwordMatch) {
+      throw new Error("Username or password are incorrect");
+    }
+
+    const token = jsonwebtoken.sign(
+      { userId: userDB._id, role: "public" },
+      secret
+    );
+
+    res.cookie("user", token, {
+      maxAge: 500000000,
+      httpOnly: true,
+      secure: true,
+    });
 
     res.status(201).send({ ok: true });
   } catch (error: any) {
@@ -43,11 +59,21 @@ export const getUser = async (req: any, res: any) => {
   try {
     const { user } = req.cookies;
 
-    const decoded = jwt.decode(user, secret);
-    console.log(decoded);
-    const { userId, role } = decoded;
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
 
-    const userDB: any = await UserModel.findById(userId);
+    const decoded = jsonwebtoken.verify(user, secret) as { userId: string };
+
+    if (!decoded.userId) {
+      throw new Error("User not authenticated");
+    }
+
+    const userDB = await UserModel.findById(decoded.userId);
+
+    if (!userDB) {
+      throw new Error("User not found");
+    }
 
     res.send({ ok: true, user: userDB });
   } catch (error: any) {

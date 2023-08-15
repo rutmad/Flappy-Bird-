@@ -1,22 +1,17 @@
-const response = await fetch("/api/get-user");
-
-async function handleGetUser() {
+document.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await fetch("/api/get-user");
     const data = await response.json();
-    console.log("data", data);
-    const { user } = data;
-    const userHTML: HTMLDivElement | null = document.querySelector("#username");
 
-    if (!user) throw new Error("didn't get user from DB");
-    if (!userHTML) throw new Error("No user element on DOM");
-    userHTML.innerText = user.name;
+    if (data.ok) {
+      const userHTML = document.querySelector("#username") as HTMLElement;
+      if (userHTML) {
+        userHTML.innerText = data.user.name;
+      }
+    } else {
+      console.error();
+    }
   } catch (error) {
     console.error(error);
   }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  handleGetUser();
 });
-export {};

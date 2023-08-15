@@ -1,11 +1,18 @@
 import express from "express";
-import mongoose, { Schema } from "mongoose";
-import * as dotenv from "dotenv";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 import usersRoute from "./API/userRoute";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
-const uri: string | undefined = process.env.MONGOOSE_URI + "FLAPPY-BIRD";
+const uri: string | undefined = process.env.MONGOOSE_URI + "flappybird";
+
+const app = express();
+
+app.use(express.json());
+app.use(express.static("./client"));
+app.use(cookieParser());
 
 if (uri) {
   mongoose
@@ -16,14 +23,8 @@ if (uri) {
   console.log("No URI");
 }
 
-const app = express();
-
-app.use(express.json());
-
-app.use(express.static("./client"));
-
 app.use("/api/", usersRoute);
 
 app.listen(3001, () => {
-  console.log("server listen on port 3000");
+  console.log("Server listening on port 3001");
 });
