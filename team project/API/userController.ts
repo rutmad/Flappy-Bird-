@@ -1,52 +1,20 @@
 import UserModel from "./userModel";
-import bcrypt from "bcrypt";
-import jsonwebtoken from "jsonwebtoken";
-
+import jwt from "jwt-simple";
 const secret: string = "mysecret";
-
-export const addUser = async (req: any, res: any) => {
-  try {
-    const { email, password } = req.body;
-    console.log(email, password);
-    const userDB = await UserModel.create({
-      email,
-      password,
-    });
-    console.log(userDB);
-
-    res.status(200).send({ ok: true });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("did not get data");
-  }
-};
 
 export const login = async (req: any, res: any) => {
   try {
-    const { email, password } = req.body;
+    const { name, password } = req.body;
+    console.log(name, password);
 
-    const userDB = await UserModel.findOne({ email });
+    const userDB = await UserModel.findOne({ name, password });
 
-    if (!userDB) {
-      throw new Error("Username or password are incorrect");
-    }
+    if (!userDB) throw new Error("Username or password are incorrect");
 
-    const passwordMatch = await bcrypt.compare(password, userDB.password || "");
+    const token = jwt.encode({ userId: userDB._id, role: "client" }, secret);
+    console.log(token);
 
-    if (!passwordMatch) {
-      throw new Error("Username or password are incorrect");
-    }
-
-    const token = jsonwebtoken.sign(
-      { userId: userDB._id, role: "public" },
-      secret
-    );
-
-    res.cookie("user", token, {
-      maxAge: 500000000,
-      httpOnly: true,
-      secure: true,
-    });
+    res.cookie("user", token, { maxAge: 500000000, httpOnly: true });
 
     res.status(201).send({ ok: true });
   } catch (error: any) {
@@ -55,25 +23,33 @@ export const login = async (req: any, res: any) => {
   }
 };
 
+export const addUser = async (req: any, res: any) => {
+  try {
+    const { name, email, password } = req.body;
+    console.log(name, email, password);
+    const userDB = await UserModel.create({
+      name,
+      email,
+      password,
+    });
+    console.log(userDB);
+
+    res.status(200).send({ ok: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("did not get user");
+  }
+};
+
 export const getUser = async (req: any, res: any) => {
   try {
     const { user } = req.cookies;
 
-    if (!user) {
-      throw new Error("User not authenticated");
-    }
+    const decoded = jwt.decode(user, secret);
+    console.log(decoded);
+    const { userId, role } = decoded;
 
-    const decoded = jsonwebtoken.verify(user, secret) as { userId: string };
-
-    if (!decoded.userId) {
-      throw new Error("User not authenticated");
-    }
-
-    const userDB = await UserModel.findById(decoded.userId);
-
-    if (!userDB) {
-      throw new Error("User not found");
-    }
+    const userDB: any = await UserModel.findById(userId);
 
     res.send({ ok: true, user: userDB });
   } catch (error: any) {

@@ -10,7 +10,7 @@
   <body>
     <div class="container">
       <h1>Login</h1>
-      <form id="login-form">
+      <form onsubmit="handleLogin(event)">
         <label for="name">Username:</label>
         <input type="text" id="name" name="name" required />
 
@@ -19,9 +19,8 @@
 
         <button type="submit">Login</button>
       </form>
-      <p>Don't have an account? <a href="registration.html">Register</a></p>
+      <p>Don't have an account? <a href="./registration.html">Register</a></p>
     </div>
-
-    <script src="./dist/index.js" defer></script>
+    <div id="users"></div>
   </body>
 </html>

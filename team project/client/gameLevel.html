@@ -3,14 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./dist/gameLevel.js" defer></script>
     <link rel="stylesheet" href="styles.css" />
     <title>Game Difficulty</title>
   </head>
-  <body>
+  <body onload="handleGetUser()">
     <div class="container">
       <h1>Choose Game Difficulty</h1>
-      <form action="/api/start-game" method="POST">
+      <form>
         <label for="difficulty">Select Difficulty:</label>
+
         <select id="difficulty" name="difficulty">
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>

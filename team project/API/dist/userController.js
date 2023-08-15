@@ -36,20 +36,47 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getUser = exports.login = exports.addUser = void 0;
+exports.getUser = exports.addUser = exports.login = void 0;
 var userModel_1 = require("./userModel");
-var bcrypt_1 = require("bcrypt");
-var jsonwebtoken_1 = require("jsonwebtoken");
+var jwt_simple_1 = require("jwt-simple");
 var secret = "mysecret";
-exports.addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, userDB, error_1;
+exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, name, password, userDB, token, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                _a = req.body, email = _a.email, password = _a.password;
-                console.log(email, password);
+                _a = req.body, name = _a.name, password = _a.password;
+                console.log(name, password);
+                return [4 /*yield*/, userModel_1["default"].findOne({ name: name, password: password })];
+            case 1:
+                userDB = _b.sent();
+                if (!userDB)
+                    throw new Error("Username or password are incorrect");
+                token = jwt_simple_1["default"].encode({ userId: userDB._id, role: "client" }, secret);
+                console.log(token);
+                res.cookie("user", token, { maxAge: 500000000, httpOnly: true });
+                res.status(201).send({ ok: true });
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _b.sent();
+                console.error(error_1);
+                res.status(500).send({ error: error_1.message });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, name, email, password, userDB, error_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, name = _a.name, email = _a.email, password = _a.password;
+                console.log(name, email, password);
                 return [4 /*yield*/, userModel_1["default"].create({
+                        name: name,
                         email: email,
                         password: password
                     })];
@@ -59,70 +86,27 @@ exports.addUser = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 res.status(200).send({ ok: true });
                 return [3 /*break*/, 3];
             case 2:
-                error_1 = _b.sent();
-                console.log(error_1);
-                res.status(500).send("did not get data");
+                error_2 = _b.sent();
+                console.log(error_2);
+                res.status(500).send("did not get user");
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, userDB, passwordMatch, token, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 3, , 4]);
-                _a = req.body, email = _a.email, password = _a.password;
-                return [4 /*yield*/, userModel_1["default"].findOne({ email: email })];
-            case 1:
-                userDB = _b.sent();
-                if (!userDB) {
-                    throw new Error("Username or password are incorrect");
-                }
-                return [4 /*yield*/, bcrypt_1["default"].compare(password, userDB.password || "")];
-            case 2:
-                passwordMatch = _b.sent();
-                if (!passwordMatch) {
-                    throw new Error("Username or password are incorrect");
-                }
-                token = jsonwebtoken_1["default"].sign({ userId: userDB._id, role: "public" }, secret);
-                res.cookie("user", token, {
-                    maxAge: 500000000,
-                    httpOnly: true,
-                    secure: true
-                });
-                res.status(201).send({ ok: true });
-                return [3 /*break*/, 4];
-            case 3:
-                error_2 = _b.sent();
-                console.error(error_2);
-                res.status(500).send({ error: error_2.message });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
 exports.getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, decoded, userDB, error_3;
+    var user, decoded, userId, role, userDB, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 user = req.cookies.user;
-                if (!user) {
-                    throw new Error("User not authenticated");
-                }
-                decoded = jsonwebtoken_1["default"].verify(user, secret);
-                if (!decoded.userId) {
-                    throw new Error("User not authenticated");
-                }
-                return [4 /*yield*/, userModel_1["default"].findById(decoded.userId)];
+                decoded = jwt_simple_1["default"].decode(user, secret);
+                console.log(decoded);
+                userId = decoded.userId, role = decoded.role;
+                return [4 /*yield*/, userModel_1["default"].findById(userId)];
             case 1:
                 userDB = _a.sent();
-                if (!userDB) {
-                    throw new Error("User not found");
-                }
                 res.send({ ok: true, user: userDB });
                 return [3 /*break*/, 3];
             case 2:
