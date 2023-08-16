@@ -94,26 +94,69 @@ async function gameLoop() {
 
 gameLoop();
 
-// This will run when the document is fully loaded
-document.addEventListener("DOMContentLoaded", function () {
-  // Get the canvas element and assert its type to HTMLCanvasElement
+document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 
-  // Check if the canvas isn't null and get the 2D context
-  if (canvas) {
-    const ctx = canvas.getContext("2d");
-
-    // Ensure we successfully got the context
-    if (ctx) {
-      // Set the fill color to black
-      ctx.fillStyle = "black";
-
-      // Draw the black box. The parameters for fillRect are (x, y, width, height)
-      ctx.fillRect(10, 10, 50, 50);
-    } else {
-      console.error("Failed to get 2D context from canvas.");
-    }
-  } else {
+  if (!canvas) {
     console.error("Canvas element not found.");
+    return;
   }
+
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) {
+    console.error("Failed to get 2D context from canvas.");
+    return;
+  }
+
+  ctx.fillStyle = "yellow";
+  ctx.fillRect(300, 300, 50, 50);
 });
+
+const birdWidth = 34;
+const birdHeight = 24;
+
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+const canvasContext = canvas.getContext("2d");
+
+const birdX = (canvas.width - birdWidth) / 2;
+const birdY = (canvas.height - birdHeight) / 2;
+
+class GameBird {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+
+  constructor(x: number, y: number, width: number, height: number) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+  move() {
+    this.x -= 1;
+  }
+
+  draw() {
+    if (!canvasContext) {
+      console.error("Canvas context not found");
+      return;
+    }
+
+    canvasContext.fillStyle = "yellow";
+    canvasContext.fillRect(this.x, this.y, this.width, this.height);
+  }
+}
+
+const bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
+
+function drawBird() {
+  bird.draw();
+}
+
+function moveBird() {
+  bird.move();
+}
+
+drawBird();
