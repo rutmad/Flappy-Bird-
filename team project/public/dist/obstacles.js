@@ -123,3 +123,25 @@ function gameLoop() {
     });
 }
 gameLoop();
+// This will run when the document is fully loaded
+document.addEventListener("DOMContentLoaded", function () {
+    // Get the canvas element and assert its type to HTMLCanvasElement
+    var canvas = document.getElementById("gameCanvas");
+    // Check if the canvas isn't null and get the 2D context
+    if (canvas) {
+        var ctx = canvas.getContext("2d");
+        // Ensure we successfully got the context
+        if (ctx) {
+            // Set the fill color to black
+            ctx.fillStyle = "black";
+            // Draw the black box. The parameters for fillRect are (x, y, width, height)
+            ctx.fillRect(10, 10, 50, 50);
+        }
+        else {
+            console.error("Failed to get 2D context from canvas.");
+        }
+    }
+    else {
+        console.error("Canvas element not found.");
+    }
+});
