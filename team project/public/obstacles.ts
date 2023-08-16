@@ -3,7 +3,7 @@ const canvasContext = canvas.getContext("2d");
 
 const PIPE_WIDTH = 50;
 const PIPE_SPACING = 120;
-const PIPE_SPEED = 2;
+const PIPE_SPEED = 1;
 
 class Pipe {
   x: number;
@@ -64,7 +64,7 @@ function drawPipe() {
 
 function createPipeAndSetInterval() {
   createPipe();
-  setInterval(createPipe, 2000);
+  setInterval(createPipe, 3000);
 }
 
 createPipeAndSetInterval();

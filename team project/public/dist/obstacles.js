@@ -38,7 +38,7 @@ var canvas = document.getElementById("gameCanvas");
 var canvasContext = canvas.getContext("2d");
 var PIPE_WIDTH = 50;
 var PIPE_SPACING = 120;
-var PIPE_SPEED = 2;
+var PIPE_SPEED = 1;
 var Pipe = /** @class */ (function () {
     function Pipe(x, y, height) {
         this.x = x;
@@ -85,7 +85,7 @@ function drawPipe() {
 }
 function createPipeAndSetInterval() {
     createPipe();
-    setInterval(createPipe, 2000);
+    setInterval(createPipe, 3000);
 }
 createPipeAndSetInterval();
 function removePipes() {
