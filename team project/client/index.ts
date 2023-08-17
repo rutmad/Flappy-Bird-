@@ -36,7 +36,7 @@ function renderUsers(users: Array<User>) {
       })
       .join(" ");
     const usersElement = document.querySelector("#users");
-    if (!usersElement) throw new Error("coundnt find users");
+    if (!usersElement) throw new Error("couldn't find users");
 
     usersElement.innerHTML = html;
   } catch (error) {
@@ -44,13 +44,11 @@ function renderUsers(users: Array<User>) {
   }
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const registrationMessage = document.getElementById(
     "registrationMessage"
   ) as HTMLElement;
 
-  
   if (!login) {
     registrationMessage.style.display = "block";
   }
@@ -108,7 +106,6 @@ function handleLogin(ev: any) {
       .then((res) => res.json())
       .then((data) => {
         if (data.ok) {
-
           window.location.href = "./gameLevel.html";
         } else {
           const loginErrorMessage =

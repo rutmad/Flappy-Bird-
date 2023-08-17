@@ -34,7 +34,7 @@ function renderUsers(users) {
             .join(" ");
         var usersElement = document.querySelector("#users");
         if (!usersElement)
-            throw new Error("coundnt find users");
+            throw new Error("couldn't find users");
         usersElement.innerHTML = html;
     }
     catch (error) {
