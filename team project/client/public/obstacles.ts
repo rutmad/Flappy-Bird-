@@ -143,6 +143,8 @@ let gameOver = false;
 
 function stopGame() {
   gameOver = true;
+  const gameOverMessage = document.getElementById("gameOverMessage");
+  gameOverMessage!.style.display = "block";
 }
 
 function checkCollision() {

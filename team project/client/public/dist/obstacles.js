@@ -143,6 +143,8 @@ function moveBird() {
 var gameOver = false;
 function stopGame() {
     gameOver = true;
+    var gameOverMessage = document.getElementById("gameOverMessage");
+    gameOverMessage.style.display = "block";
 }
 function checkCollision() {
     for (var _i = 0, pipes_3 = pipes; _i < pipes_3.length; _i++) {
