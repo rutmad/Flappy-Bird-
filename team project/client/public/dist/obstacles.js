@@ -95,34 +95,6 @@ function removePipes() {
         }
     }
 }
-function gameLoop() {
-    return __awaiter(this, void 0, void 0, function () {
-        var error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    if (!canvasContext) {
-                        throw new Error("there is no canvasContext");
-                    }
-                    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-                    return [4 /*yield*/, movePipe()];
-                case 1:
-                    _a.sent();
-                    drawPipe();
-                    removePipes();
-                    requestAnimationFrame(gameLoop);
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_1 = _a.sent();
-                    console.log(error_1);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    });
-}
-gameLoop();
 document.addEventListener("DOMContentLoaded", function () {
     var canvas = document.getElementById("gameCanvas");
     if (!canvas) {
@@ -139,8 +111,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 var birdWidth = 34;
 var birdHeight = 24;
-var canvas = document.getElementById("canvas");
-var canvasContext = canvas.getContext("2d");
 var birdX = (canvas.width - birdWidth) / 2;
 var birdY = (canvas.height - birdHeight) / 2;
 var GameBird = /** @class */ (function () {
@@ -170,4 +140,49 @@ function drawBird() {
 function moveBird() {
     bird.move();
 }
-drawBird();
+var gameOver = false;
+function stopGame() {
+    gameOver = true;
+}
+function checkCollision() {
+    for (var _i = 0, pipes_3 = pipes; _i < pipes_3.length; _i++) {
+        var pipe = pipes_3[_i];
+        if ((bird.x + birdWidth > pipe.x && bird.y < pipe.height) ||
+            (bird.x + birdWidth > pipe.x && bird.y > pipe.height + PIPE_SPACING)) {
+            stopGame();
+        }
+    }
+}
+function gameLoop() {
+    return __awaiter(this, void 0, void 0, function () {
+        var error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    if (!canvasContext) {
+                        throw new Error("there is no canvasContext");
+                    }
+                    if (gameOver) {
+                        return [2 /*return*/];
+                    }
+                    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+                    return [4 /*yield*/, movePipe()];
+                case 1:
+                    _a.sent();
+                    drawPipe();
+                    removePipes();
+                    drawBird();
+                    checkCollision();
+                    requestAnimationFrame(gameLoop);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    console.log(error_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+gameLoop();

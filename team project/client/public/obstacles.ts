@@ -77,23 +77,6 @@ function removePipes() {
   }
 }
 
-async function gameLoop() {
-  try {
-    if (!canvasContext) {
-      throw new Error("there is no canvasContext");
-    }
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-    await movePipe();
-    drawPipe();
-    removePipes();
-    requestAnimationFrame(gameLoop);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-gameLoop();
-
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 
@@ -115,9 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const birdWidth = 34;
 const birdHeight = 24;
-
-const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const canvasContext = canvas.getContext("2d");
 
 const birdX = (canvas.width - birdWidth) / 2;
 const birdY = (canvas.height - birdHeight) / 2;
@@ -159,4 +139,41 @@ function moveBird() {
   bird.move();
 }
 
-drawBird();
+let gameOver = false;
+
+function stopGame() {
+  gameOver = true;
+}
+
+function checkCollision() {
+  for (const pipe of pipes) {
+    if (
+      (bird.x + birdWidth > pipe.x && bird.y < pipe.height) ||
+      (bird.x + birdWidth > pipe.x && bird.y > pipe.height + PIPE_SPACING)
+    ) {
+      stopGame();
+    }
+  }
+}
+
+async function gameLoop() {
+  try {
+    if (!canvasContext) {
+      throw new Error("there is no canvasContext");
+    }
+    if (gameOver) {
+      return;
+    }
+    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    await movePipe();
+    drawPipe();
+    removePipes();
+    drawBird();
+    checkCollision();
+    requestAnimationFrame(gameLoop);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+gameLoop();
