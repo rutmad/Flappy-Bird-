@@ -8,7 +8,8 @@
     <title>Login</title>
   </head>
   <body>
-    <div class="container">
+    <img class="background-image" src="./pictures/flappybird-background.jpg" />
+    <div class="container-login">
       <h1>Login</h1>
       <p id="registrationMessage" style="color: red; display: none">
         You are not registered, you must register first.
@@ -16,11 +17,13 @@
       <form onsubmit="handleLogin(event)">
         <label for="name">Username:</label>
         <input type="text" id="name" name="name" required />
-
+        <br />
+        <br />
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required />
-
-        <button type="submit">Login</button>
+        <br />
+        <br />
+        <button class="btn-login" type="submit">Login</button>
       </form>
       <p id="loginErrorMessage" style="color: red; display: none">
         The username or password is incorrect.
