@@ -30,6 +30,16 @@ body {
   border-radius: 5px;
 }
 
+#levelMessage {
+  display: none;
+  position: absolute;
+  top: 20%;
+  left: 47%;
+  color: white;
+  font-size: 40px;
+  border-radius: 5px;
+}
+
 #bird {
   // position: relative;
   width: 8%;

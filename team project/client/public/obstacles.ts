@@ -2,18 +2,20 @@ const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 const canvasContext = canvas.getContext("2d");
 
 const PIPE_WIDTH = 50;
-const PIPE_SPACING = 120;
-const PIPE_SPEED = 1;
+let PIPE_SPACING = 150;
+let PIPE_SPEED = 1;
 
 class Pipe {
   x: number;
   y: number;
   height: number;
+  color: string;
 
   constructor(x: number, y: number, height: number) {
     this.x = x;
     this.y = y;
     this.height = height;
+    this.color = "green";
   }
 
   draw() {
@@ -21,7 +23,7 @@ class Pipe {
       if (!canvasContext) {
         throw new Error("didn't found canvas");
       }
-      canvasContext.fillStyle = "green";
+      canvasContext.fillStyle = this.color;
       canvasContext.fillRect(this.x, this.y, PIPE_WIDTH, this.height);
     } catch (error) {
       console.log(error);
@@ -85,15 +87,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const ctx = canvas.getContext("2d");
-
-  if (!ctx) {
+  if (!canvasContext) {
     console.error("Failed to get 2D context from canvas.");
     return;
   }
 
-  ctx.fillStyle = "yellow";
-  ctx.fillRect(300, 300, 50, 50);
+  canvasContext.fillStyle = "yellow";
+  canvasContext.fillRect(300, 300, 50, 50);
 });
 
 const birdWidth = 34;
@@ -114,9 +114,6 @@ class GameBird {
     this.width = width;
     this.height = height;
   }
-  move() {
-    this.x -= 1;
-  }
 
   draw() {
     if (!canvasContext) {
@@ -133,10 +130,6 @@ const bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
 
 function drawBird() {
   bird.draw();
-}
-
-function moveBird() {
-  bird.move();
 }
 
 let gameOver = false;
@@ -158,6 +151,55 @@ function checkCollision() {
   }
 }
 
+let startTime = Date.now();
+let level = 1;
+
+function drawLevel() {
+  if (level === 2) {
+    if (canvasContext) {
+      canvasContext.font = "30px";
+      canvasContext.fillStyle = "black";
+      canvasContext.fillText(
+        "great - level 2",
+        canvas.width / 2,
+        canvas.height / 2
+      );
+    }
+  }
+}
+
+let levelChanged = false;
+
+function updateLevel() {
+  try {
+    const currentTime = Date.now();
+    if (!levelChanged && currentTime - startTime >= 7000) {
+      level = 2;
+      PIPE_SPACING = 120;
+      PIPE_SPEED = 2;
+      for (const pipe of pipes) {
+        pipe.color = "red";
+      }
+      const levelMessage = document.getElementById("levelMessage");
+      if (levelMessage) {
+        levelMessage.style.display = "block";
+        levelChanged = true;
+        setTimeout(() => {
+          if (levelMessage) {
+            levelMessage.style.display = "none";
+          } else {
+            throw new Error("no levelMessage");
+          }
+        }, 2000);
+      } else {
+        throw new Error("no levelMessage");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function gameLoop() {
   try {
     if (!canvasContext) {
@@ -170,12 +212,15 @@ async function gameLoop() {
     await movePipe();
     drawPipe();
     removePipes();
+    drawLevel();
     drawBird();
     checkCollision();
+    updateLevel();
     requestAnimationFrame(gameLoop);
   } catch (error) {
     console.log(error);
   }
 }
 
+startTime = Date.now();
 gameLoop();

@@ -37,20 +37,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var canvas = document.getElementById("gameCanvas");
 var canvasContext = canvas.getContext("2d");
 var PIPE_WIDTH = 50;
-var PIPE_SPACING = 120;
+var PIPE_SPACING = 150;
 var PIPE_SPEED = 1;
 var Pipe = /** @class */ (function () {
     function Pipe(x, y, height) {
         this.x = x;
         this.y = y;
         this.height = height;
+        this.color = "green";
     }
     Pipe.prototype.draw = function () {
         try {
             if (!canvasContext) {
                 throw new Error("didn't found canvas");
             }
-            canvasContext.fillStyle = "green";
+            canvasContext.fillStyle = this.color;
             canvasContext.fillRect(this.x, this.y, PIPE_WIDTH, this.height);
         }
         catch (error) {
@@ -101,13 +102,12 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Canvas element not found.");
         return;
     }
-    var ctx = canvas.getContext("2d");
-    if (!ctx) {
+    if (!canvasContext) {
         console.error("Failed to get 2D context from canvas.");
         return;
     }
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(300, 300, 50, 50);
+    canvasContext.fillStyle = "yellow";
+    canvasContext.fillRect(300, 300, 50, 50);
 });
 var birdWidth = 34;
 var birdHeight = 24;
@@ -120,9 +120,6 @@ var GameBird = /** @class */ (function () {
         this.width = width;
         this.height = height;
     }
-    GameBird.prototype.move = function () {
-        this.x -= 1;
-    };
     GameBird.prototype.draw = function () {
         if (!canvasContext) {
             console.error("Canvas context not found");
@@ -137,9 +134,6 @@ var bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
 function drawBird() {
     bird.draw();
 }
-function moveBird() {
-    bird.move();
-}
 var gameOver = false;
 function stopGame() {
     gameOver = true;
@@ -153,6 +147,51 @@ function checkCollision() {
             (bird.x + birdWidth > pipe.x && bird.y > pipe.height + PIPE_SPACING)) {
             stopGame();
         }
+    }
+}
+var startTime = Date.now();
+var level = 1;
+function drawLevel() {
+    if (level === 2) {
+        if (canvasContext) {
+            canvasContext.font = "30px";
+            canvasContext.fillStyle = "black";
+            canvasContext.fillText("great - level 2", canvas.width / 2, canvas.height / 2);
+        }
+    }
+}
+var levelChanged = false;
+function updateLevel() {
+    try {
+        var currentTime = Date.now();
+        if (!levelChanged && currentTime - startTime >= 7000) {
+            level = 2;
+            PIPE_SPACING = 120;
+            PIPE_SPEED = 2;
+            for (var _i = 0, pipes_4 = pipes; _i < pipes_4.length; _i++) {
+                var pipe = pipes_4[_i];
+                pipe.color = "red";
+            }
+            var levelMessage_1 = document.getElementById("levelMessage");
+            if (levelMessage_1) {
+                levelMessage_1.style.display = "block";
+                levelChanged = true;
+                setTimeout(function () {
+                    if (levelMessage_1) {
+                        levelMessage_1.style.display = "none";
+                    }
+                    else {
+                        throw new Error("no levelMessage");
+                    }
+                }, 2000);
+            }
+            else {
+                throw new Error("no levelMessage");
+            }
+        }
+    }
+    catch (error) {
+        console.log(error);
     }
 }
 function gameLoop() {
@@ -174,8 +213,10 @@ function gameLoop() {
                     _a.sent();
                     drawPipe();
                     removePipes();
+                    drawLevel();
                     drawBird();
                     checkCollision();
+                    updateLevel();
                     requestAnimationFrame(gameLoop);
                     return [3 /*break*/, 3];
                 case 2:
@@ -187,4 +228,5 @@ function gameLoop() {
         });
     });
 }
+startTime = Date.now();
 gameLoop();
