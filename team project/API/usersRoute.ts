@@ -5,6 +5,7 @@ import { addUser, login, getUser } from "./userController";
 router
   .post("/login", login)
   .post("/add-user", addUser)
-  .get("/get-user", getUser);
+  .get("/get-user", getUser)
+  
 
 export default router;
