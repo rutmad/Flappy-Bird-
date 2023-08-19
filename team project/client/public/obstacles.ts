@@ -4,6 +4,7 @@ const canvasContext = canvas.getContext("2d");
 const PIPE_WIDTH = 50;
 let PIPE_SPACING = 150;
 let PIPE_SPEED = 1;
+let score = 0;
 
 class Pipe {
   x: number;
@@ -48,6 +49,14 @@ function createPipe() {
     height + PIPE_SPACING,
     canvas.height - (height + PIPE_SPACING)
   );
+
+  // adding a score each time the bird passes a pipe
+  pipes.forEach((pipe) => {
+    if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
+      score += 0.5;
+      pipe.scored = true;
+    }
+  });
 
   pipes.push(upperPipe, lowerPipe);
 }
@@ -123,6 +132,10 @@ class GameBird {
 
     canvasContext.fillStyle = "yellow";
     canvasContext.fillRect(this.x, this.y, this.width, this.height);
+
+    canvasContext.fillStyle = "white";
+    canvasContext.font = "24px Ariel";
+    canvasContext.fillText("score: " + score, 10, 30);
   }
 }
 

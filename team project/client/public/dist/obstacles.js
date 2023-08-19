@@ -39,8 +39,10 @@ var canvasContext = canvas.getContext("2d");
 var PIPE_WIDTH = 50;
 var PIPE_SPACING = 150;
 var PIPE_SPEED = 1;
+var score = 0;
 var Pipe = /** @class */ (function () {
     function Pipe(x, y, height) {
+        this.scored = false;
         this.x = x;
         this.y = y;
         this.height = height;
@@ -70,6 +72,13 @@ function createPipe() {
     var height = Math.random() * (maxHeight - minHeight) + minHeight;
     var upperPipe = new Pipe(canvas.width, 0, height);
     var lowerPipe = new Pipe(canvas.width, height + PIPE_SPACING, canvas.height - (height + PIPE_SPACING));
+    // adding a score each time the bird passes a pipe 
+    pipes.forEach(function (pipe) {
+        if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
+            score += 0.5;
+            pipe.scored = true;
+        }
+    });
     pipes.push(upperPipe, lowerPipe);
 }
 function movePipe() {
@@ -127,6 +136,9 @@ var GameBird = /** @class */ (function () {
         }
         canvasContext.fillStyle = "yellow";
         canvasContext.fillRect(this.x, this.y, this.width, this.height);
+        canvasContext.fillStyle = "white";
+        canvasContext.font = "24px Ariel";
+        canvasContext.fillText("score: " + score, 10, 30);
     };
     return GameBird;
 }());

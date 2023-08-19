@@ -34,7 +34,7 @@ function renderUsers(users) {
             .join(" ");
         var usersElement = document.querySelector("#users");
         if (!usersElement)
-            throw new Error("coundnt find users");
+            throw new Error("couldn't find users");
         usersElement.innerHTML = html;
     }
     catch (error) {
@@ -116,3 +116,23 @@ function handleLogin(ev) {
         console.error(error);
     }
 }
+;
+function saveScore(score) {
+    fetch('/saveScore', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ score: score })
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        if (data.success) {
+            console.log('Score saved successfully');
+        }
+        else {
+            console.error('Failed to save score');
+        }
+    });
+}
+;

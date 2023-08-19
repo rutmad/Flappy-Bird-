@@ -36,7 +36,7 @@ function renderUsers(users: Array<User>) {
       })
       .join(" ");
     const usersElement = document.querySelector("#users");
-    if (!usersElement) throw new Error("coundnt find users");
+    if (!usersElement) throw new Error("couldn't find users");
 
     usersElement.innerHTML = html;
   } catch (error) {
@@ -44,13 +44,11 @@ function renderUsers(users: Array<User>) {
   }
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const registrationMessage = document.getElementById(
     "registrationMessage"
   ) as HTMLElement;
 
-  
   if (!login) {
     registrationMessage.style.display = "block";
   }
@@ -108,7 +106,6 @@ function handleLogin(ev: any) {
       .then((res) => res.json())
       .then((data) => {
         if (data.ok) {
-
           window.location.href = "./gameLevel.html";
         } else {
           const loginErrorMessage =
@@ -124,4 +121,23 @@ function handleLogin(ev: any) {
   } catch (error) {
     console.error(error);
   }
-}
+};
+
+
+function saveScore(score) {
+  fetch('/saveScore', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ score: score })
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          console.log('Score saved successfully');
+      } else {
+          console.error('Failed to save score');
+      }
+  });
+};

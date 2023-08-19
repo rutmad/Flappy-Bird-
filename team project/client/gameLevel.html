@@ -4,10 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="./dist/index.js" defer></script>
-    <link rel="stylesheet" href="./dist/login.css" />
+    <script src="./dist/gameLevel.js" defer></script>
+
+    <link rel="stylesheet" href="./dist/style.css" />
     <title>Game Difficulty</title>
   </head>
   <body onload="handleGetUser()">
+    <img class="background-image" src="./pictures/flappybird-background.jpg" />
     <div class="container">
       <h1>Choose Game Difficulty</h1>
       <form>
@@ -19,9 +22,7 @@
           <option value="hard">Hard</option>
         </select>
 
-        <button type="submit">
-          <a href="./public/index.html">Start Game</a>
-        </button>
+        <button id="startGameButton" type="button">Start Game</button>
       </form>
     </div>
   </body>
