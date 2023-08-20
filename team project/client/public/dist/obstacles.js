@@ -118,6 +118,7 @@ function removePipes() {
         }
     }
 }
+var birdImg;
 document.addEventListener("DOMContentLoaded", function () {
     var canvas = document.getElementById("gameCanvas");
     var canvasContext = canvas.getContext("2d");
@@ -129,8 +130,8 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Failed to get 2D context from canvas.");
         return;
     }
-    var birdWidth = 34;
-    var birdHeight = 24;
+    var birdWidth = 42;
+    var birdHeight = 42;
     var birdX = (canvas.width - birdWidth) / 2;
     var birdY = (canvas.height - birdHeight) / 2;
     var GameBird = /** @class */ (function () {
@@ -152,8 +153,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 this.y = canvas.height - this.height;
                 this.velocityY = 0;
             }
-            canvasContext.fillStyle = "yellow";
-            canvasContext.fillRect(this.x, this.y, this.width, this.height);
+            // canvasContext.fillStyle = "yellow";
+            // canvasContext.fillRect(this.x, this.y, this.width, this.height);
+            birdImg = new Image();
+            birdImg.src = "./pictures/flappybird.png";
+            canvasContext.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
             canvasContext.fillStyle = "white";
             canvasContext.font = "24px Arial";
             canvasContext.fillText("score: " + score, 10, 30);

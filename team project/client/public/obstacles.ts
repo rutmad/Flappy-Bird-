@@ -102,6 +102,8 @@ function removePipes() {
   }
 }
 
+let birdImg
+
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
   const canvasContext = canvas.getContext("2d");
@@ -116,8 +118,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const birdWidth = 34;
-  const birdHeight = 24;
+  const birdWidth = 42;
+  const birdHeight = 42;
 
   const birdX = (canvas.width - birdWidth) / 2;
   const birdY = (canvas.height - birdHeight) / 2;
@@ -151,8 +153,13 @@ document.addEventListener("DOMContentLoaded", () => {
         this.velocityY = 0;
       }
 
-      canvasContext.fillStyle = "yellow";
-      canvasContext.fillRect(this.x, this.y, this.width, this.height);
+      // canvasContext.fillStyle = "yellow";
+      // canvasContext.fillRect(this.x, this.y, this.width, this.height);
+
+     birdImg = new Image();
+     birdImg.src = "./pictures/flappybird.png"
+     canvasContext.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height)
+
 
       canvasContext.fillStyle = "white";
       canvasContext.font = "24px Arial";
