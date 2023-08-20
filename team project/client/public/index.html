@@ -5,19 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flappy Bird</title>
     <link rel="stylesheet" href="./dist/flappybird.css" />
-    <!-- <script src="../dist/flappybird.js"></script> -->
     <script src="./dist/obstacles.js" defer></script>
     <script src="./dist/box.js" defer></script>
   </head>
   <body>
     <div id="gamePage" class="page"></div>
     <div class="gameboard">
-      <!-- adding a box for scores:-->
-      <!-- <div class="fullBox">
-        <div class="score">Score:</div>
-        <div class="black-box"></div>
-      </div> -->
-
       <canvas
         id="gameCanvas"
         width="800"
@@ -28,7 +21,9 @@
     </div>
 
     <div id="gameOverMessage" style="display: none">Game Over</div>
-    <div id="levelMessage" style="display: none">great - level 2</div>
+    <div id="levelMessage" class="level2Message" style="display: none">
+      great - level 2
+    </div>
 
     <!-- <img src="./pictures/flappybird.png" alt="" id="bird" /> -->
   </body>
