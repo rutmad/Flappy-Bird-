@@ -53,7 +53,16 @@ label {
   font-size: 40px;
 }
 #startGameButton {
-  margin-left: 180px;
+  margin-left: 150px;
   font-family: "Starting Machine", sans-serif;
   font-size: 40px;
+}
+.countdown {
+  font-size: 120px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
 }

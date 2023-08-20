@@ -1,8 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
     var startGameButton = document.getElementById("startGameButton");
-    if (startGameButton) {
+    var countdownElement = document.getElementById("countdown");
+    if (startGameButton && countdownElement) {
         startGameButton.addEventListener("click", function () {
-            window.location.href = "./public/index.html";
+            startCountdown(countdownElement, 3, function () {
+                window.location.href = "./public/index.html";
+            });
         });
     }
 });
+function startCountdown(element, seconds, onComplete) {
+    var count = seconds;
+    element.style.display = "block";
+    var countdownInterval = setInterval(function () {
+        if (count > 0) {
+            element.textContent = count;
+            count--;
+        }
+        else {
+            element.style.display = "none";
+            clearInterval(countdownInterval);
+            onComplete();
+        }
+    }, 1000);
+}
