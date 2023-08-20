@@ -104,6 +104,7 @@ function removePipes() {
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
+  const canvasContext = canvas.getContext("2d");
 
   if (!canvas) {
     console.error("Canvas element not found.");
@@ -115,50 +116,59 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  canvasContext.fillStyle = "yellow";
-  canvasContext.fillRect(300, 300, 50, 50);
-});
+  const birdWidth = 34;
+  const birdHeight = 24;
 
-const birdWidth = 34;
-const birdHeight = 24;
+  const birdX = (canvas.width - birdWidth) / 2;
+  const birdY = (canvas.height - birdHeight) / 2;
 
-const birdX = (canvas.width - birdWidth) / 2;
-const birdY = (canvas.height - birdHeight) / 2;
+  class GameBird {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    velocityY: number;
 
-class GameBird {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-
-  constructor(x: number, y: number, width: number, height: number) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-  }
-
-  draw() {
-    if (!canvasContext) {
-      console.error("Canvas context not found");
-      return;
+    constructor(x: number, y: number, width: number, height: number) {
+      this.x = x;
+      this.y = y;
+      this.width = width;
+      this.height = height;
+      this.velocityY = 0;
     }
 
-    canvasContext.fillStyle = "yellow";
-    canvasContext.fillRect(this.x, this.y, this.width, this.height);
+    draw() {
+      if (!canvasContext) {
+        console.error("Canvas context not found");
+        return;
+      }
 
-    canvasContext.fillStyle = "white";
-    canvasContext.font = "24px Ariel";
-    canvasContext.fillText("score: " + score, 10, 30);
+      this.velocityY += 0.2; // Gravity effect
+      this.y += this.velocityY;
+
+      if (this.y > canvas.height - this.height) {
+        this.y = canvas.height - this.height;
+        this.velocityY = 0;
+      }
+
+      canvasContext.fillStyle = "yellow";
+      canvasContext.fillRect(this.x, this.y, this.width, this.height);
+
+      canvasContext.fillStyle = "white";
+      canvasContext.font = "24px Arial";
+      canvasContext.fillText("score: " + score, 10, 30);
+    }
+
+    flap() {
+      this.velocityY = -5; // Move the bird up when flapping
+    }
   }
-}
 
-const bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
+  const bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
 
-function drawBird() {
-  bird.draw();
-}
-
+  function drawBird() {
+    bird.draw();
+  }
 let gameOver = false;
 
 function stopGame() {
@@ -239,3 +249,8 @@ async function gameLoop() {
 
 startTime = Date.now();
 gameLoop();
+
+// The code for the bird to move up and down
+document.addEventListener("keydown", (event) => {
+  if (event.key === " ") {
+    bird.flap();
