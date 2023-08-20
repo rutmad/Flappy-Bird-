@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="./dist/index.js" defer></script>
     <link rel="stylesheet" href="./dist/style.css" />
+    <link
+      href="https://fonts.cdnfonts.com/css/starting-machine"
+      rel="stylesheet"
+    />
+
     <title>Login</title>
   </head>
   <body>
     <img class="background-image" src="./pictures/flappybird-background.jpg" />
     <div class="container-login">
-      <h1>Login</h1>
+      <h1 class="title-login">Login</h1>
       <p id="registrationMessage" style="color: red; display: none">
         You are not registered, you must register first.
       </p>
@@ -21,6 +26,8 @@
         <br />
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required />
+        <br />
+        <br />
         <br />
         <br />
         <button class="btn-login" type="submit">Login</button>
