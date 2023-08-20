@@ -2,9 +2,10 @@ const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 const canvasContext = canvas.getContext("2d");
 
 const PIPE_WIDTH = 50;
-let PIPE_SPACING = 150;
+let PIPE_SPACING = 250;
 let PIPE_SPEED = 1;
 let score = 0;
+let level = 1;
 
 class Pipe {
   x: number;
@@ -42,24 +43,26 @@ function createPipe() {
   const minHeight = 50;
   const maxHeight = canvas.height - minHeight - PIPE_SPACING;
   const height = Math.random() * (maxHeight - minHeight) + minHeight;
-
   const upperPipe = new Pipe(canvas.width, 0, height);
   const lowerPipe = new Pipe(
     canvas.width,
     height + PIPE_SPACING,
     canvas.height - (height + PIPE_SPACING)
   );
-
-  // adding a score each time the bird passes a pipe
-  pipes.forEach((pipe) => {
-    if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
-      score += 0.5;
-      pipe.scored = true;
-    }
-  });
-
+  if (level === 2) {
+    upperPipe.color = "red";
+    lowerPipe.color = "red";
+  }
   pipes.push(upperPipe, lowerPipe);
 }
+
+// adding a score each time the bird passes a pipe
+pipes.forEach((pipe) => {
+  if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
+    score += 0.5;
+    pipe.scored = true;
+  }
+});
 
 function movePipe() {
   for (const pipe of pipes) {
@@ -73,9 +76,20 @@ function drawPipe() {
   }
 }
 
+// function createPipeAndSetInterval() {
+//   createPipe();
+//   if (level === 1) {
+//     setInterval(createPipe, 3000);
+//   }
+// }
+
+let pipeCreationInterval: number | null = null;
+
 function createPipeAndSetInterval() {
   createPipe();
-  setInterval(createPipe, 3000);
+  if (level === 1 && pipeCreationInterval === null) {
+    pipeCreationInterval = setInterval(createPipe, 4000);
+  }
 }
 
 createPipeAndSetInterval();
@@ -165,7 +179,6 @@ function checkCollision() {
 }
 
 let startTime = Date.now();
-let level = 1;
 
 function drawLevel() {
   if (level === 2) {
@@ -186,27 +199,16 @@ let levelChanged = false;
 function updateLevel() {
   try {
     const currentTime = Date.now();
-    if (!levelChanged && currentTime - startTime >= 7000) {
+    if (!levelChanged && currentTime - startTime >= 15000) {
       level = 2;
-      PIPE_SPACING = 120;
       PIPE_SPEED = 2;
-      for (const pipe of pipes) {
-        pipe.color = "red";
+      if (pipeCreationInterval) {
+        clearInterval(pipeCreationInterval);
+        pipeCreationInterval = null;
+        setInterval(createPipe, 2000);
       }
-      const levelMessage = document.getElementById("levelMessage");
-      if (levelMessage) {
-        levelMessage.style.display = "block";
-        levelChanged = true;
-        setTimeout(() => {
-          if (levelMessage) {
-            levelMessage.style.display = "none";
-          } else {
-            throw new Error("no levelMessage");
-          }
-        }, 2000);
-      } else {
-        throw new Error("no levelMessage");
-      }
+
+      levelChanged = true;
     }
   } catch (error) {
     console.log(error);

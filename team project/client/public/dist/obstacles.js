@@ -37,12 +37,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var canvas = document.getElementById("gameCanvas");
 var canvasContext = canvas.getContext("2d");
 var PIPE_WIDTH = 50;
-var PIPE_SPACING = 150;
+var PIPE_SPACING = 250;
 var PIPE_SPEED = 1;
 var score = 0;
+var level = 1;
 var Pipe = /** @class */ (function () {
     function Pipe(x, y, height) {
-        this.scored = false;
         this.x = x;
         this.y = y;
         this.height = height;
@@ -72,15 +72,19 @@ function createPipe() {
     var height = Math.random() * (maxHeight - minHeight) + minHeight;
     var upperPipe = new Pipe(canvas.width, 0, height);
     var lowerPipe = new Pipe(canvas.width, height + PIPE_SPACING, canvas.height - (height + PIPE_SPACING));
-    // adding a score each time the bird passes a pipe 
-    pipes.forEach(function (pipe) {
-        if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
-            score += 0.5;
-            pipe.scored = true;
-        }
-    });
+    if (level === 2) {
+        upperPipe.color = "red";
+        lowerPipe.color = "red";
+    }
     pipes.push(upperPipe, lowerPipe);
 }
+// adding a score each time the bird passes a pipe
+pipes.forEach(function (pipe) {
+    if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
+        score += 0.5;
+        pipe.scored = true;
+    }
+});
 function movePipe() {
     for (var _i = 0, pipes_1 = pipes; _i < pipes_1.length; _i++) {
         var pipe = pipes_1[_i];
@@ -93,9 +97,18 @@ function drawPipe() {
         pipe.draw();
     }
 }
+// function createPipeAndSetInterval() {
+//   createPipe();
+//   if (level === 1) {
+//     setInterval(createPipe, 3000);
+//   }
+// }
+var pipeCreationInterval = null;
 function createPipeAndSetInterval() {
     createPipe();
-    setInterval(createPipe, 3000);
+    if (level === 1 && pipeCreationInterval === null) {
+        pipeCreationInterval = setInterval(createPipe, 4000);
+    }
 }
 createPipeAndSetInterval();
 function removePipes() {
@@ -162,7 +175,6 @@ function checkCollision() {
     }
 }
 var startTime = Date.now();
-var level = 1;
 function drawLevel() {
     if (level === 2) {
         if (canvasContext) {
@@ -176,30 +188,15 @@ var levelChanged = false;
 function updateLevel() {
     try {
         var currentTime = Date.now();
-        if (!levelChanged && currentTime - startTime >= 7000) {
+        if (!levelChanged && currentTime - startTime >= 15000) {
             level = 2;
-            PIPE_SPACING = 120;
             PIPE_SPEED = 2;
-            for (var _i = 0, pipes_4 = pipes; _i < pipes_4.length; _i++) {
-                var pipe = pipes_4[_i];
-                pipe.color = "red";
+            if (pipeCreationInterval) {
+                clearInterval(pipeCreationInterval);
+                pipeCreationInterval = null;
+                setInterval(createPipe, 2000);
             }
-            var levelMessage_1 = document.getElementById("levelMessage");
-            if (levelMessage_1) {
-                levelMessage_1.style.display = "block";
-                levelChanged = true;
-                setTimeout(function () {
-                    if (levelMessage_1) {
-                        levelMessage_1.style.display = "none";
-                    }
-                    else {
-                        throw new Error("no levelMessage");
-                    }
-                }, 2000);
-            }
-            else {
-                throw new Error("no levelMessage");
-            }
+            levelChanged = true;
         }
     }
     catch (error) {
