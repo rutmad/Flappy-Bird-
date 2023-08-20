@@ -181,16 +181,12 @@ function checkCollision() {
 let startTime = Date.now();
 
 function drawLevel() {
-  if (level === 2) {
-    if (canvasContext) {
-      canvasContext.font = "30px";
-      canvasContext.fillStyle = "black";
-      canvasContext.fillText(
-        "great - level 2",
-        canvas.width / 2,
-        canvas.height / 2
-      );
-    }
+  const drawLevel2 = document.getElementById("levelMessage");
+  if (drawLevel2) {
+    drawLevel2.style.display = "block";
+    setTimeout(() => {
+      drawLevel2.style.display = "none";
+    }, 2000);
   }
 }
 
@@ -207,7 +203,7 @@ function updateLevel() {
         pipeCreationInterval = null;
         setInterval(createPipe, 2000);
       }
-
+      drawLevel();
       levelChanged = true;
     }
   } catch (error) {
@@ -227,7 +223,6 @@ async function gameLoop() {
     await movePipe();
     drawPipe();
     removePipes();
-    drawLevel();
     drawBird();
     checkCollision();
     updateLevel();
