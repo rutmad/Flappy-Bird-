@@ -159,9 +159,20 @@ document.addEventListener("DOMContentLoaded", () => {
      canvasContext.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height)
 
 
+     // score code :
       canvasContext.fillStyle = "white";
       canvasContext.font = "24px Arial";
       canvasContext.fillText("score: " + score, 10, 30);
+      pipes.forEach((pipe) => {
+        if (birdX > pipe.x + PIPE_WIDTH && !pipe.scored) {
+          // score += 0.5;
+          const userScore = score += 0.5;
+          console.log("score: ", userScore);
+          pipe.scored = true;
+        }
+      });
+      
+
     }
 
     flap() {
@@ -174,13 +185,6 @@ document.addEventListener("DOMContentLoaded", () => {
 // bird code
 const bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
 
-// adding a score each time the bird passes a pipe
-pipes.forEach((pipe) => {
-  if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
-    score += 0.5;
-    pipe.scored = true;
-  }
-});
 
 function drawBird() {
   bird.draw();

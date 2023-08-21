@@ -152,9 +152,18 @@ document.addEventListener("DOMContentLoaded", function () {
             birdImg = new Image();
             birdImg.src = "./pictures/flappybird.png";
             canvasContext.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+            // score code :
             canvasContext.fillStyle = "white";
             canvasContext.font = "24px Arial";
             canvasContext.fillText("score: " + score, 10, 30);
+            pipes.forEach(function (pipe) {
+                if (birdX > pipe.x + PIPE_WIDTH && !pipe.scored) {
+                    // score += 0.5;
+                    var userScore = score += 0.5;
+                    console.log("score: ", userScore);
+                    pipe.scored = true;
+                }
+            });
         };
         GameBird.prototype.flap = function () {
             this.velocityY = -5; // Move the bird up when flapping
@@ -165,13 +174,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }());
     // bird code
     var bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
-    // adding a score each time the bird passes a pipe
-    pipes.forEach(function (pipe) {
-        if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
-            score += 0.5;
-            pipe.scored = true;
-        }
-    });
     function drawBird() {
         bird.draw();
     }
