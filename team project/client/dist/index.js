@@ -116,23 +116,38 @@ function handleLogin(ev) {
         console.error(error);
     }
 }
-;
 function saveScore(score) {
-    fetch('/saveScore', {
-        method: 'POST',
+    fetch("/saveScore", {
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({ score: score })
     })
         .then(function (response) { return response.json(); })
         .then(function (data) {
         if (data.success) {
-            console.log('Score saved successfully');
+            console.log("Score saved successfully");
         }
         else {
-            console.error('Failed to save score');
+            console.error("Failed to save score");
         }
     });
 }
-;
+// function saveScore(score) {
+//   fetch('/saveScore', {
+//       method: 'POST',
+//       headers: {
+//           'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({ score: score })
+//   })
+//   .then(response => response.json())
+//   .then(data => {
+//       if (data.success) {
+//           console.log('Score saved successfully');
+//       } else {
+//           console.error('Failed to save score');
+//       }
+//   });
+// };

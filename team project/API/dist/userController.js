@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getUser = exports.addUser = exports.login = void 0;
+exports.saveScore = exports.getUser = exports.addUser = exports.login = void 0;
 var userModel_1 = require("./userModel");
 var jwt_simple_1 = require("jwt-simple");
 var secret = "mysecret";
@@ -78,7 +78,8 @@ exports.addUser = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, userModel_1["default"].create({
                         name: name,
                         email: email,
-                        password: password
+                        password: password,
+                        score: 0
                     })];
             case 1:
                 userDB = _b.sent();
@@ -113,6 +114,30 @@ exports.getUser = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 error_3 = _a.sent();
                 console.error(error_3);
                 res.status(500).send({ error: error_3.message });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.saveScore = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, decoded, userId, score, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                user = req.cookies.user;
+                decoded = jwt_simple_1["default"].decode(user, secret);
+                userId = decoded.userId;
+                score = req.body.score;
+                return [4 /*yield*/, userModel_1["default"].findByIdAndUpdate(userId, { score: score })];
+            case 1:
+                _a.sent();
+                res.send({ success: true });
+                return [3 /*break*/, 3];
+            case 2:
+                error_4 = _a.sent();
+                console.error(error_4);
+                res.status(500).send({ error: error_4.message });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

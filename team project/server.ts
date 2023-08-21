@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import usersRoute from "./API/usersRoute";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-import { MongoClient } from 'mongodb';
 
 dotenv.config();
 
@@ -14,8 +13,8 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(express.static("./client"));
-
 
 if (uri) {
   mongoose
@@ -28,17 +27,17 @@ if (uri) {
 
 app.use("/api/", usersRoute);
 
-// adding code 
+// adding code
 
 // ------------------------------------------------
 
-
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 // Replace the url with your MongoDB connection string
-const url = "mongodb+srv://dyderune:project2@team2-flappybird-projec.hapnhup.mongodb.net/";
-const dbName = 'flappyBird';
-let db;
+// const url =
+//   "mongodb+srv://dyderune:project2@team2-flappybird-projec.hapnhup.mongodb.net/";
+// const dbName = "flappyBird";
+// let db;
 
 // Connect to MongoDB
 // MongoClient.connect(url, { useUnifiedTopology: true }, (err, client) => {
@@ -49,22 +48,20 @@ let db;
 // });
 
 // Endpoint to store score
-app.post('/saveScore', (req, res) => {
-    const score = req.body.score;
-    
-    // Add error checks as necessary
+// app.post("/saveScore", (req, res) => {
+//   const score = req.body.score;
 
-    // db.collection('scores').insertOne({ score: score }, (err, result) => {
-    //     if (err) {
-    //         res.status(500).send({ error: "Failed to save score" });
-    //         return;
-    //     }
-        
-    //     res.send({ success: true });
-    // });
-});
+// Add error checks as necessary
 
+// db.collection('scores').insertOne({ score: score }, (err, result) => {
+//     if (err) {
+//         res.status(500).send({ error: "Failed to save score" });
+//         return;
+//     }
 
+//     res.send({ success: true });
+// });
+// });
 
 app.listen(3001, () => {
   console.log("Server listening on port 3001");

@@ -31,6 +31,7 @@ export const addUser = async (req: any, res: any) => {
       name,
       email,
       password,
+      score: 0,
     });
     console.log(userDB);
 
@@ -52,6 +53,22 @@ export const getUser = async (req: any, res: any) => {
     const userDB: any = await UserModel.findById(userId);
 
     res.send({ ok: true, user: userDB });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).send({ error: error.message });
+  }
+};
+export const saveScore = async (req: any, res: any) => {
+  try {
+    const { user } = req.cookies;
+    const decoded = jwt.decode(user, secret);
+    const { userId } = decoded;
+
+    const { score } = req.body;
+
+    await UserModel.findByIdAndUpdate(userId, { score });
+
+    res.send({ success: true });
   } catch (error: any) {
     console.error(error);
     res.status(500).send({ error: error.message });
