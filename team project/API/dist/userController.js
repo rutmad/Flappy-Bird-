@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getUser = exports.addUser = exports.login = void 0;
+exports.saveScore = exports.getUser = exports.addUser = exports.login = void 0;
 var userModel_1 = require("./userModel");
 var jwt_simple_1 = require("jwt-simple");
 var secret = "mysecret";
@@ -78,7 +78,8 @@ exports.addUser = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, userModel_1["default"].create({
                         name: name,
                         email: email,
-                        password: password
+                        password: password,
+                        score: 0
                     })];
             case 1:
                 userDB = _b.sent();
@@ -115,6 +116,33 @@ exports.getUser = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 res.status(500).send({ error: error_3.message });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.saveScore = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, name, score, userDB, error_4;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 3, , 4]);
+                _a = req.body, name = _a.name, score = _a.score;
+                return [4 /*yield*/, userModel_1["default"].findOne({ name: name })];
+            case 1:
+                userDB = _b.sent();
+                if (!userDB)
+                    throw new Error("User not found");
+                userDB.score = score;
+                return [4 /*yield*/, userDB.save()];
+            case 2:
+                _b.sent();
+                res.status(200).send({ success: true });
+                return [3 /*break*/, 4];
+            case 3:
+                error_4 = _b.sent();
+                console.error(error_4);
+                res.status(500).send({ success: false, error: error_4.message });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };

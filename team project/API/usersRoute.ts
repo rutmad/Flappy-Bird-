@@ -1,11 +1,11 @@
 import express from "express";
 const router = express.Router();
-import { addUser, login, getUser } from "./userController";
+import { addUser, login, getUser, saveScore } from "./userController";
 
 router
   .post("/login", login)
   .post("/add-user", addUser)
   .get("/get-user", getUser)
-  
+  .post("/saveScore", saveScore);
 
 export default router;

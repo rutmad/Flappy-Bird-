@@ -31,6 +31,7 @@ export const addUser = async (req: any, res: any) => {
       name,
       email,
       password,
+      score: 0,
     });
     console.log(userDB);
 
@@ -55,5 +56,22 @@ export const getUser = async (req: any, res: any) => {
   } catch (error: any) {
     console.error(error);
     res.status(500).send({ error: error.message });
+  }
+};
+export const saveScore = async (req: any, res: any) => {
+  try {
+    const { name, score } = req.body;
+
+    const userDB: any = await UserModel.findOne({ name });
+
+    if (!userDB) throw new Error("User not found");
+
+    userDB.score = score;
+    await userDB.save();
+
+    res.status(200).send({ success: true });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).send({ success: false, error: error.message });
   }
 };

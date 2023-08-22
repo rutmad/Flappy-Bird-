@@ -1,3 +1,7 @@
+body {
+  font-family: "Starting Machine", sans-serif;
+}
+
 .background-image {
   background-image: url(./pictures/flappybird-background.jpg);
   background-size: cover;
@@ -13,25 +17,62 @@
 
 .container {
   margin-bottom: 50px;
-  margin-left: 500px;
+  margin-left: 380px;
   margin-top: -400px;
 }
 
 .container-login {
   margin-top: -500px;
-  margin-left: 550px;
+  margin-left: 530px;
 }
 
 h1 {
   margin-bottom: 50px;
 }
 
-.btn-login,
-.btn-register {
+.btn-login {
   margin-left: 100px;
+  font-family: "Starting Machine", sans-serif;
+  font-size: 25px;
+}
+
+.btn-register {
+  margin-left: 60px;
+  font-family: "Starting Machine", sans-serif;
+  font-size: 25px;
 }
 
 .container-registration {
   margin-left: 550px;
   margin-top: -500px;
+}
+
+.title-login {
+  margin-left: 50px;
+  font-size: 50px;
+  margin-bottom: 50px;
+}
+
+label {
+  font-size: larger;
+}
+
+.title-registration {
+  font-size: 40px;
+}
+
+#startGameButton {
+  margin-left: 150px;
+  font-family: "Starting Machine", sans-serif;
+  font-size: 40px;
+}
+
+.countdown {
+  font-size: 120px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
 }

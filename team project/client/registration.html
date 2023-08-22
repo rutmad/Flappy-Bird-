@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="./dist/index.js" defer></script>
     <link rel="stylesheet" href="./dist/style.css" />
+    <link
+      href="https://fonts.cdnfonts.com/css/starting-machine"
+      rel="stylesheet"
+    />
+
     <title>Registration</title>
   </head>
   <body>
     <img class="background-image" src="./pictures/flappybird-background.jpg" />
     <div class="container-registration">
-      <h1>Registration</h1>
+      <h1 class="title-registration">Registration</h1>
 
       <form onsubmit="handleAddUser(event)">
         <label for="name">Name:</label>
@@ -23,6 +28,8 @@
         <br />
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required />
+        <br />
+        <br />
         <br />
         <br />
         <button class="btn-register" type="submit">Register</button>

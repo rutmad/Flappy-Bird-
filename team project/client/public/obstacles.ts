@@ -12,12 +12,14 @@ class Pipe {
   y: number;
   height: number;
   color: string;
+  scored?: boolean;  
 
   constructor(x: number, y: number, height: number) {
     this.x = x;
     this.y = y;
     this.height = height;
     this.color = "green";
+  
   }
 
   draw() {
@@ -37,12 +39,14 @@ class Pipe {
   }
 }
 
+// pipes
 const pipes: Pipe[] = [];
 
 function createPipe() {
   const minHeight = 50;
   const maxHeight = canvas.height - minHeight - PIPE_SPACING;
   const height = Math.random() * (maxHeight - minHeight) + minHeight;
+
   const upperPipe = new Pipe(canvas.width, 0, height);
   const lowerPipe = new Pipe(
     canvas.width,
@@ -53,16 +57,10 @@ function createPipe() {
     upperPipe.color = "red";
     lowerPipe.color = "red";
   }
+
   pipes.push(upperPipe, lowerPipe);
 }
 
-// adding a score each time the bird passes a pipe
-pipes.forEach((pipe) => {
-  if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
-    score += 0.5;
-    pipe.scored = true;
-  }
-});
 
 function movePipe() {
   for (const pipe of pipes) {
@@ -129,9 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
     y: number;
     width: number;
     height: number;
-    velocityY: number;
+    velocityY: number;   
 
-    constructor(x: number, y: number, width: number, height: number) {
+     constructor(x: number, y: number, width: number, height: number) {
       this.x = x;
       this.y = y;
       this.width = width;
@@ -139,13 +137,13 @@ document.addEventListener("DOMContentLoaded", () => {
       this.velocityY = 0;
     }
 
-    draw() {
-      if (!canvasContext) {
-        console.error("Canvas context not found");
-        return;
-      }
+  draw() {
+    if (!canvasContext) {
+      console.error("Canvas context not found");
+      return;
+    }
 
-      this.velocityY += 0.2; // Gravity effect
+  this.velocityY += 0.2; // Gravity effect
       this.y += this.velocityY;
 
       if (this.y > canvas.height - this.height) {
@@ -161,21 +159,42 @@ document.addEventListener("DOMContentLoaded", () => {
      canvasContext.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height)
 
 
+     // score code :
       canvasContext.fillStyle = "white";
       canvasContext.font = "24px Arial";
       canvasContext.fillText("score: " + score, 10, 30);
+      pipes.forEach((pipe) => {
+        if (birdX > pipe.x + PIPE_WIDTH && !pipe.scored) {
+          // score += 0.5;
+          const userScore = score += 0.5;
+          console.log("score: ", userScore);
+          pipe.scored = true;
+        }
+      });
+      
+
     }
+
 
     flap() {
       this.velocityY = -5; // Move the bird up when flapping
-    }
+    //    canvasContext.fillStyle = "yellow";
+    // canvasContext.fillRect(this.x, this.y, this.width, this.height);
   }
+}
 
-  const bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
+// bird code
+const bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
 
-  function drawBird() {
-    bird.draw();
-  }
+
+function drawBird() {
+  bird.draw();
+}
+
+// function moveBird() {
+//   bird.move();
+// }
+
 let gameOver = false;
 
 function stopGame() {
@@ -242,7 +261,7 @@ async function gameLoop() {
     removePipes();
     drawBird();
     checkCollision();
-    updateLevel();
+       updateLevel();
     requestAnimationFrame(gameLoop);
   } catch (error) {
     console.log(error);
@@ -256,3 +275,23 @@ gameLoop();
 document.addEventListener("keydown", (event) => {
   if (event.key === " ") {
     bird.flap();
+  }
+});
+
+function saveScore(name: any, score: any) {
+  fetch("/saveScore", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name: name, score: score }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        console.log("Score saved successfully");
+      } else {
+        console.error("Failed to save score");
+      }
+    });
+}

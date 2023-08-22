@@ -65,6 +65,7 @@ var Pipe = /** @class */ (function () {
     };
     return Pipe;
 }());
+// pipes
 var pipes = [];
 function createPipe() {
     var minHeight = 50;
@@ -78,13 +79,6 @@ function createPipe() {
     }
     pipes.push(upperPipe, lowerPipe);
 }
-// adding a score each time the bird passes a pipe
-pipes.forEach(function (pipe) {
-    if (bird.x > pipe.x + PIPE_WIDTH && !pipe.scored) {
-        score += 0.5;
-        pipe.scored = true;
-    }
-});
 function movePipe() {
     for (var _i = 0, pipes_1 = pipes; _i < pipes_1.length; _i++) {
         var pipe = pipes_1[_i];
@@ -158,19 +152,34 @@ document.addEventListener("DOMContentLoaded", function () {
             birdImg = new Image();
             birdImg.src = "./pictures/flappybird.png";
             canvasContext.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+            // score code :
             canvasContext.fillStyle = "white";
             canvasContext.font = "24px Arial";
             canvasContext.fillText("score: " + score, 10, 30);
+            pipes.forEach(function (pipe) {
+                if (birdX > pipe.x + PIPE_WIDTH && !pipe.scored) {
+                    // score += 0.5;
+                    var userScore = score += 0.5;
+                    console.log("score: ", userScore);
+                    pipe.scored = true;
+                }
+            });
         };
         GameBird.prototype.flap = function () {
             this.velocityY = -5; // Move the bird up when flapping
+            //    canvasContext.fillStyle = "yellow";
+            // canvasContext.fillRect(this.x, this.y, this.width, this.height);
         };
         return GameBird;
     }());
+    // bird code
     var bird = new GameBird(birdX, birdY, birdWidth, birdHeight);
     function drawBird() {
         bird.draw();
     }
+    // function moveBird() {
+    //   bird.move();
+    // }
     var gameOver = false;
     function stopGame() {
         gameOver = true;
@@ -257,4 +266,22 @@ document.addEventListener("DOMContentLoaded", function () {
             bird.flap();
         }
     });
+    function saveScore(name, score) {
+        fetch("/saveScore", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name: name, score: score })
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+            if (data.success) {
+                console.log("Score saved successfully");
+            }
+            else {
+                console.error("Failed to save score");
+            }
+        });
+    }
 });

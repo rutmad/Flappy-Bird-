@@ -15,19 +15,24 @@ app.use(express_1["default"].static("./client"));
 if (uri) {
     mongoose_1["default"]
         .connect(uri)
-        .then(function () { return console.log("DB connected"); })["catch"](function (err) { return console.log("DB error :", err); });
+        .then(function () { return console.log("DB connected"); })["catch"](function (err) { return console.log("DB error:", err); });
 }
 else {
     console.log("No URI");
 }
 app.use("/api/", usersRoute_1["default"]);
-// adding code 
-// ------------------------------------------------
 app.use(body_parser_1["default"].json());
+app.listen(3001, function () {
+    console.log("Server listening on port 3001");
+});
+// adding code
+// ------------------------------------------------
+// app.use(bodyParser.json());
 // Replace the url with your MongoDB connection string
-var url = "mongodb+srv://dyderune:project2@team2-flappybird-projec.hapnhup.mongodb.net/";
-var dbName = 'flappyBird';
-var db;
+// const url =
+//   "mongodb+srv://dyderune:project2@team2-flappybird-projec.hapnhup.mongodb.net/";
+// const dbName = "flappyBird";
+// let db;
 // Connect to MongoDB
 // MongoClient.connect(url, { useUnifiedTopology: true }, (err, client) => {
 //     if (err) throw err;
@@ -35,17 +40,17 @@ var db;
 //     db = client.db(dbName);
 // });
 // Endpoint to store score
-app.post('/saveScore', function (req, res) {
-    var score = req.body.score;
-    // Add error checks as necessary
-    // db.collection('scores').insertOne({ score: score }, (err, result) => {
-    //     if (err) {
-    //         res.status(500).send({ error: "Failed to save score" });
-    //         return;
-    //     }
-    //     res.send({ success: true });
-    // });
-});
-app.listen(3001, function () {
-    console.log("Server listening on port 3001");
-});
+// app.post("/saveScore", (req, res) => {
+//   const score = req.body.score;
+// Add error checks as necessary
+// db.collection('scores').insertOne({ score: score }, (err, result) => {
+//     if (err) {
+//         res.status(500).send({ error: "Failed to save score" });
+//         return;
+//     }
+//     res.send({ success: true });
+// });
+// });
+// app.listen(3001, () => {
+//   console.log("Server listening on port 3001");
+// });
