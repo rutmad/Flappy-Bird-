@@ -120,26 +120,29 @@ exports.getUser = function (req, res) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 exports.saveScore = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, decoded, userId, score, error_4;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a, name, score, userDB, error_4;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                user = req.cookies.user;
-                decoded = jwt_simple_1["default"].decode(user, secret);
-                userId = decoded.userId;
-                score = req.body.score;
-                return [4 /*yield*/, userModel_1["default"].findByIdAndUpdate(userId, { score: score })];
+                _b.trys.push([0, 3, , 4]);
+                _a = req.body, name = _a.name, score = _a.score;
+                return [4 /*yield*/, userModel_1["default"].findOne({ name: name })];
             case 1:
-                _a.sent();
-                res.send({ success: true });
-                return [3 /*break*/, 3];
+                userDB = _b.sent();
+                if (!userDB)
+                    throw new Error("User not found");
+                userDB.score = score;
+                return [4 /*yield*/, userDB.save()];
             case 2:
-                error_4 = _a.sent();
+                _b.sent();
+                res.status(200).send({ success: true });
+                return [3 /*break*/, 4];
+            case 3:
+                error_4 = _b.sent();
                 console.error(error_4);
-                res.status(500).send({ error: error_4.message });
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                res.status(500).send({ success: false, error: error_4.message });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };

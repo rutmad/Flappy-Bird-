@@ -60,17 +60,18 @@ export const getUser = async (req: any, res: any) => {
 };
 export const saveScore = async (req: any, res: any) => {
   try {
-    const { user } = req.cookies;
-    const decoded = jwt.decode(user, secret);
-    const { userId } = decoded;
+    const { name, score } = req.body;
 
-    const { score } = req.body;
+    const userDB: any = await UserModel.findOne({ name });
 
-    await UserModel.findByIdAndUpdate(userId, { score });
+    if (!userDB) throw new Error("User not found");
 
-    res.send({ success: true });
+    userDB.score = score;
+    await userDB.save();
+
+    res.status(200).send({ success: true });
   } catch (error: any) {
     console.error(error);
-    res.status(500).send({ error: error.message });
+    res.status(500).send({ success: false, error: error.message });
   }
 };

@@ -175,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
     flap() {
       this.velocityY = -5; // Move the bird up when flapping
     //    canvasContext.fillStyle = "yellow";
@@ -276,3 +277,21 @@ document.addEventListener("keydown", (event) => {
     bird.flap();
   }
 });
+
+function saveScore(name: any, score: any) {
+  fetch("/saveScore", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name: name, score: score }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        console.log("Score saved successfully");
+      } else {
+        console.error("Failed to save score");
+      }
+    });
+}

@@ -123,13 +123,13 @@ function handleLogin(ev: any) {
   }
 }
 
-function saveScore(score: any) {
+function saveScore(name: any, score: any) {
   fetch("/saveScore", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ score: score }),
+    body: JSON.stringify({ name: name, score: score }),
   })
     .then((response) => response.json())
     .then((data) => {

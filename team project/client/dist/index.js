@@ -116,13 +116,13 @@ function handleLogin(ev) {
         console.error(error);
     }
 }
-function saveScore(score) {
+function saveScore(name, score) {
     fetch("/saveScore", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ score: score })
+        body: JSON.stringify({ name: name, score: score })
     })
         .then(function (response) { return response.json(); })
         .then(function (data) {

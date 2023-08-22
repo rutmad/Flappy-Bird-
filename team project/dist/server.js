@@ -11,17 +11,20 @@ var uri = process.env.MONGOOSE_URI + "flappybird";
 var app = express_1["default"]();
 app.use(express_1["default"].json());
 app.use(cookie_parser_1["default"]());
-app.use(body_parser_1["default"].json());
 app.use(express_1["default"].static("./client"));
 if (uri) {
     mongoose_1["default"]
         .connect(uri)
-        .then(function () { return console.log("DB connected"); })["catch"](function (err) { return console.log("DB error :", err); });
+        .then(function () { return console.log("DB connected"); })["catch"](function (err) { return console.log("DB error:", err); });
 }
 else {
     console.log("No URI");
 }
 app.use("/api/", usersRoute_1["default"]);
+app.use(body_parser_1["default"].json());
+app.listen(3001, function () {
+    console.log("Server listening on port 3001");
+});
 // adding code
 // ------------------------------------------------
 // app.use(bodyParser.json());
@@ -48,6 +51,6 @@ app.use("/api/", usersRoute_1["default"]);
 //     res.send({ success: true });
 // });
 // });
-app.listen(3001, function () {
-    console.log("Server listening on port 3001");
-});
+// app.listen(3001, () => {
+//   console.log("Server listening on port 3001");
+// });

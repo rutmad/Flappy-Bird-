@@ -266,4 +266,22 @@ document.addEventListener("DOMContentLoaded", function () {
             bird.flap();
         }
     });
+    function saveScore(name, score) {
+        fetch("/saveScore", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name: name, score: score })
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+            if (data.success) {
+                console.log("Score saved successfully");
+            }
+            else {
+                console.error("Failed to save score");
+            }
+        });
+    }
 });

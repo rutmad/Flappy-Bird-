@@ -13,19 +13,23 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(bodyParser.json());
 app.use(express.static("./client"));
 
 if (uri) {
   mongoose
     .connect(uri)
     .then(() => console.log("DB connected"))
-    .catch((err) => console.log("DB error :", err));
+    .catch((err) => console.log("DB error:", err));
 } else {
   console.log("No URI");
 }
 
 app.use("/api/", usersRoute);
+app.use(bodyParser.json());
+
+app.listen(3001, () => {
+  console.log("Server listening on port 3001");
+});
 
 // adding code
 
@@ -63,6 +67,6 @@ app.use("/api/", usersRoute);
 // });
 // });
 
-app.listen(3001, () => {
-  console.log("Server listening on port 3001");
-});
+// app.listen(3001, () => {
+//   console.log("Server listening on port 3001");
+// });
