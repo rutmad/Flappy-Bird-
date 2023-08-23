@@ -235,23 +235,73 @@ function stopGame() {
   getLeaderboard();
 }
 
+// function checkCollision() {
+//   for (const pipePair of pipePairs) {
+//     const upperPipe = pipePair.upperPipe;
+//     const lowerPipe = pipePair.lowerPipe;
+//     const pipeTop = upperPipe.height;
+//     const pipeBottom = lowerPipe.y;
+
+//     console.log("Upper Pipe Height:", pipeTop);
+//     console.log("Lower Pipe Height:", pipeBottom);
+
+//     if (
+//       bird.x + birdWidth > upperPipe.x &&
+//       bird.x < upperPipe.x + PIPE_WIDTH &&
+//       (bird.y < pipeTop || bird.y + birdHeight > pipeBottom)
+//     ) {
+//       console.log("Collision Detected!");
+//       stopGame();
+//     }
+//   }
+// }
+
 function checkCollision() {
+  const birdBoundingBox = {
+    left: bird.x,
+    right: bird.x + birdWidth,
+    top: bird.y,
+    bottom: bird.y + birdHeight,
+  };
+
   for (const pipePair of pipePairs) {
     const upperPipe = pipePair.upperPipe;
     const lowerPipe = pipePair.lowerPipe;
-    const pipeTop = upperPipe.height;
-    const pipeBottom = lowerPipe.y;
 
-    console.log("Upper Pipe Height:", pipeTop);
-    console.log("Lower Pipe Height:", pipeBottom);
+    const upperPipeBoundingBox = {
+      left: upperPipe.x,
+      right: upperPipe.x + PIPE_WIDTH,
+      top: 0,
+      bottom: upperPipe.height,
+    };
+
+    const lowerPipeBoundingBox = {
+      left: lowerPipe.x,
+      right: lowerPipe.x + PIPE_WIDTH,
+      top: lowerPipe.y,
+      bottom: lowerPipe.y + lowerPipe.height,
+    };
 
     if (
-      bird.x + birdWidth > upperPipe.x &&
-      bird.x < upperPipe.x + PIPE_WIDTH &&
-      (bird.y < pipeTop || bird.y + birdHeight > pipeBottom)
+      birdBoundingBox.right > upperPipeBoundingBox.left &&
+      birdBoundingBox.left < upperPipeBoundingBox.right &&
+      birdBoundingBox.bottom > upperPipeBoundingBox.top &&
+      birdBoundingBox.top < upperPipeBoundingBox.bottom
     ) {
-      console.log("Collision Detected!");
+      console.log("Collision Detected with upper pipe!");
       stopGame();
+      return;
+    }
+
+    if (
+      birdBoundingBox.right > lowerPipeBoundingBox.left &&
+      birdBoundingBox.left < lowerPipeBoundingBox.right &&
+      birdBoundingBox.bottom > lowerPipeBoundingBox.top &&
+      birdBoundingBox.top < lowerPipeBoundingBox.bottom
+    ) {
+      console.log("Collision Detected with lower pipe!");
+      stopGame();
+      return;
     }
   }
 }
