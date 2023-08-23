@@ -198,8 +198,8 @@ function updateScore() {
   pipePairs.forEach((pipePair) => {
     const upperPipe = pipePair.upperPipe;
     if (birdX > upperPipe.x + PIPE_WIDTH && !upperPipe.scored) {
-      score += 1;
-      console.log("Score: ", score);
+      const userScore = (score += 1);
+      console.log("Score: ", userScore);
       upperPipe.scored = true;
     }
   });

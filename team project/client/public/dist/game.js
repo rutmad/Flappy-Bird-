@@ -152,8 +152,8 @@ function updateScore() {
     pipePairs.forEach(function (pipePair) {
         var upperPipe = pipePair.upperPipe;
         if (birdX > upperPipe.x + PIPE_WIDTH && !upperPipe.scored) {
-            score += 1;
-            console.log("Score: ", score);
+            var userScore = (score += 1);
+            console.log("Score: ", userScore);
             upperPipe.scored = true;
         }
     });
