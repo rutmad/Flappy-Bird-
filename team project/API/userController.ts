@@ -75,3 +75,13 @@ export const saveScore = async (req: any, res: any) => {
     res.status(500).send({ success: false, error: error.message });
   }
 };
+
+export const getLeaderboard = async (req: any, res: any) => {
+  try {
+    const leaderboard = await UserModel.find({}).sort({ score: -1 }).limit(10);
+    res.json({ leaderboard });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).send({ error: error.message });
+  }
+};

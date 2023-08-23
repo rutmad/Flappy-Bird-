@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.saveScore = exports.getUser = exports.addUser = exports.login = void 0;
+exports.getLeaderboard = exports.saveScore = exports.getUser = exports.addUser = exports.login = void 0;
 var userModel_1 = require("./userModel");
 var jwt_simple_1 = require("jwt-simple");
 var secret = "mysecret";
@@ -143,6 +143,26 @@ exports.saveScore = function (req, res) { return __awaiter(void 0, void 0, void 
                 res.status(500).send({ success: false, error: error_4.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getLeaderboard = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var leaderboard, error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, userModel_1["default"].find({}).sort({ score: -1 }).limit(10)];
+            case 1:
+                leaderboard = _a.sent();
+                res.json({ leaderboard: leaderboard });
+                return [3 /*break*/, 3];
+            case 2:
+                error_5 = _a.sent();
+                console.error(error_5);
+                res.status(500).send({ error: error_5.message });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); };

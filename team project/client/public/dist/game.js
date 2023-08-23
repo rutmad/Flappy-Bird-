@@ -1,3 +1,6 @@
+"use strict";
+exports.__esModule = true;
+var userController_1 = require("../../API/userController");
 var canvas = document.getElementById("gameCanvas");
 var canvasContext = canvas.getContext("2d");
 // pipes section ///
@@ -130,12 +133,24 @@ function handleKeyboardInput() {
         birdYPosition += 3;
     }
 }
+function getLeaderboard() {
+    fetch("/api/users/leaderboard")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+        console.log(data);
+    })["catch"](function (error) {
+        console.error(error);
+    });
+}
 // controller section ///
 var gameOver = false;
 function stopGame() {
     gameOver = true;
     var gameOverMessage = document.getElementById("gameOverMessage");
     gameOverMessage.style.display = "block";
+    // score keeper
+    userController_1.saveScore("username", score);
+    getLeaderboard();
 }
 function checkCollision() {
     for (var _i = 0, pipePairs_3 = pipePairs; _i < pipePairs_3.length; _i++) {

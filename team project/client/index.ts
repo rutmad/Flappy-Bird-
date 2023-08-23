@@ -141,20 +141,13 @@ function saveScore(name: any, score: any) {
     });
 }
 
-// function saveScore(score) {
-//   fetch('/saveScore', {
-//       method: 'POST',
-//       headers: {
-//           'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify({ score: score })
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//       if (data.success) {
-//           console.log('Score saved successfully');
-//       } else {
-//           console.error('Failed to save score');
-//       }
-//   });
-// };
+function getLeaderboard() {
+  fetch("/api/users/leaderboard")
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}

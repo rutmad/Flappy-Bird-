@@ -1,3 +1,5 @@
+import { saveScore } from "../../API/userController";
+
 const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 const canvasContext = canvas.getContext("2d");
 
@@ -170,6 +172,16 @@ function handleKeyboardInput() {
     birdYPosition += 3;
   }
 }
+function getLeaderboard() {
+  fetch("/api/users/leaderboard")
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
 // controller section ///
 
@@ -179,6 +191,10 @@ function stopGame() {
   gameOver = true;
   const gameOverMessage = document.getElementById("gameOverMessage");
   gameOverMessage!.style.display = "block";
+
+  // score keeper
+  saveScore("username", score);
+  getLeaderboard();
 }
 
 function checkCollision() {
