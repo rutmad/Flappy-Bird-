@@ -1,4 +1,4 @@
-import { saveScore } from "../../API/userController";
+// import { saveScore } from "../../API/userController";
 
 const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 const canvasContext = canvas.getContext("2d");
@@ -15,11 +15,13 @@ class Pipe {
   x: number;
   y: number;
   height: number;
+  scored: boolean;
 
   constructor(x: number, y: number, height: number) {
     this.x = x;
     this.y = y;
     this.height = height;
+    this.scored = false;
   }
 
   draw() {
@@ -184,6 +186,37 @@ function getLeaderboard() {
 }
 
 // controller section ///
+canvasContext!.fillStyle = "white";
+canvasContext!.font = "24px Arial";
+canvasContext!.fillText("score: " + score, 10, 30);
+function updateScore() {
+  pipePairs.forEach((pipePair) => {
+    const upperPipe = pipePair.upperPipe;
+    if (birdX > upperPipe.x + PIPE_WIDTH && !upperPipe.scored) {
+      score += 1;
+      console.log("Score: ", score);
+      upperPipe.scored = true;
+    }
+  });
+}
+
+function saveScore(name: any, score: any) {
+  fetch("/saveScore", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name: name, score: score }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        console.log("Score saved successfully");
+      } else {
+        console.error("Failed to save score");
+      }
+    });
+}
 
 let gameOver = false;
 
@@ -264,6 +297,7 @@ function gameLoop() {
     movePipes();
     drawBird();
     drawPipes();
+    updateScore();
     removePipes();
     checkCollision();
     updateLevel();

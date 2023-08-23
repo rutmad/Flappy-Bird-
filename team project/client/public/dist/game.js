@@ -1,6 +1,4 @@
-"use strict";
-exports.__esModule = true;
-var userController_1 = require("../../API/userController");
+// import { saveScore } from "../../API/userController";
 var canvas = document.getElementById("gameCanvas");
 var canvasContext = canvas.getContext("2d");
 // pipes section ///
@@ -14,6 +12,7 @@ var Pipe = /** @class */ (function () {
         this.x = x;
         this.y = y;
         this.height = height;
+        this.scored = false;
     }
     Pipe.prototype.draw = function () {
         try {
@@ -143,13 +142,44 @@ function getLeaderboard() {
     });
 }
 // controller section ///
+canvasContext.fillStyle = "white";
+canvasContext.font = "24px Arial";
+canvasContext.fillText("score: " + score, 10, 30);
+function updateScore() {
+    pipePairs.forEach(function (pipePair) {
+        var upperPipe = pipePair.upperPipe;
+        if (birdX > upperPipe.x + PIPE_WIDTH && !upperPipe.scored) {
+            score += 1;
+            console.log("Score: ", score);
+            upperPipe.scored = true;
+        }
+    });
+}
+function saveScore(name, score) {
+    fetch("/saveScore", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name: name, score: score })
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+        if (data.success) {
+            console.log("Score saved successfully");
+        }
+        else {
+            console.error("Failed to save score");
+        }
+    });
+}
 var gameOver = false;
 function stopGame() {
     gameOver = true;
     var gameOverMessage = document.getElementById("gameOverMessage");
     gameOverMessage.style.display = "block";
     // score keeper
-    userController_1.saveScore("username", score);
+    saveScore("username", score);
     getLeaderboard();
 }
 function checkCollision() {
@@ -212,6 +242,7 @@ function gameLoop() {
         movePipes();
         drawBird();
         drawPipes();
+        updateScore();
         removePipes();
         checkCollision();
         updateLevel();
