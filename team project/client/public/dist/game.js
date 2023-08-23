@@ -87,8 +87,8 @@ function removePipes() {
     }
 }
 // bird section ///
-var birdWidth = 34;
-var birdHeight = 24;
+var birdWidth = 40;
+var birdHeight = 40;
 var birdX = (canvas.width - birdWidth) / 2;
 var birdY = (canvas.height - birdHeight) / 2;
 var GameBird = /** @class */ (function () {
@@ -103,8 +103,11 @@ var GameBird = /** @class */ (function () {
             console.error("Canvas context not found");
             return;
         }
-        canvasContext.fillStyle = "yellow";
-        canvasContext.fillRect(this.x, this.y, this.width, this.height);
+        var birdImage = new Image();
+        birdImage.src = "pictures/flappybird.png";
+        canvasContext.drawImage(birdImage, this.x, this.y, this.width, this.height);
+        // canvasContext.fillStyle = "yellow";
+        // canvasContext.fillRect(this.x, this.y, this.width, this.height);
         canvasContext.fillStyle = "white";
         canvasContext.font = "24px Ariel";
         canvasContext.fillText("score: " + score, 10, 30);

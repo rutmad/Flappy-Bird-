@@ -114,8 +114,8 @@ function removePipes() {
 
 // bird section ///
 
-const birdWidth = 34;
-const birdHeight = 24;
+const birdWidth = 40;
+const birdHeight = 40;
 
 const birdX = (canvas.width - birdWidth) / 2;
 const birdY = (canvas.height - birdHeight) / 2;
@@ -139,8 +139,12 @@ class GameBird {
       return;
     }
 
-    canvasContext.fillStyle = "yellow";
-    canvasContext.fillRect(this.x, this.y, this.width, this.height);
+    const birdImage = new Image();
+    birdImage.src = "pictures/flappybird.png";
+    canvasContext.drawImage(birdImage, this.x, this.y, this.width, this.height);
+
+    // canvasContext.fillStyle = "yellow";
+    // canvasContext.fillRect(this.x, this.y, this.width, this.height);
 
     canvasContext.fillStyle = "white";
     canvasContext.font = "24px Ariel";
@@ -186,6 +190,7 @@ function getLeaderboard() {
 }
 
 // controller section ///
+
 canvasContext!.fillStyle = "white";
 canvasContext!.font = "24px Arial";
 canvasContext!.fillText("score: " + score, 10, 30);
