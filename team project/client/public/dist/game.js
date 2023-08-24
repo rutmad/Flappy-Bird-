@@ -136,7 +136,7 @@ function handleKeyboardInput() {
     }
 }
 function getLeaderboard() {
-    fetch("/api/users/leaderboard")
+    fetch("/api/leaderboard")
         .then(function (res) { return res.json(); })
         .then(function (data) {
         console.log(data);
@@ -159,7 +159,7 @@ function updateScore() {
     });
 }
 function saveScore(name, score) {
-    fetch("/saveScore", {
+    fetch("/api/saveScore", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -181,7 +181,6 @@ function stopGame() {
     gameOver = true;
     var gameOverMessage = document.getElementById("gameOverMessage");
     gameOverMessage.style.display = "block";
-    // score keeper
     saveScore("username", score);
     getLeaderboard();
 }

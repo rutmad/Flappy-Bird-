@@ -179,7 +179,7 @@ function handleKeyboardInput() {
   }
 }
 function getLeaderboard() {
-  fetch("/api/users/leaderboard")
+  fetch("/api/leaderboard")
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
@@ -206,7 +206,7 @@ function updateScore() {
 }
 
 function saveScore(name: any, score: any) {
-  fetch("/saveScore", {
+  fetch("/api/saveScore", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -229,8 +229,6 @@ function stopGame() {
   gameOver = true;
   const gameOverMessage = document.getElementById("gameOverMessage");
   gameOverMessage!.style.display = "block";
-
-  // score keeper
   saveScore("username", score);
   getLeaderboard();
 }
