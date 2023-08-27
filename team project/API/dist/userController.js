@@ -126,15 +126,20 @@ exports.saveScore = function (req, res) { return __awaiter(void 0, void 0, void 
             case 0:
                 _b.trys.push([0, 3, , 4]);
                 _a = req.body, name = _a.name, score = _a.score;
+                console.log("Saving score for user:", name, "Score:", score);
                 return [4 /*yield*/, userModel_1["default"].findOne({ name: name })];
             case 1:
                 userDB = _b.sent();
-                if (!userDB)
+                if (!userDB) {
+                    console.log("User not found:", name);
                     throw new Error("User not found");
+                }
+                console.log("User found. Updating score...");
                 userDB.score = score;
                 return [4 /*yield*/, userDB.save()];
             case 2:
                 _b.sent();
+                console.log("Score updated successfully");
                 res.status(200).send({ success: true });
                 return [3 /*break*/, 4];
             case 3:

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (startGameButton && countdownElement) {
         startGameButton.addEventListener("click", function () {
             startCountdown(countdownElement, 3, function () {
-                window.location.href = "./public/index.html";
+                window.location.href = "./game.html";
             });
         });
     }

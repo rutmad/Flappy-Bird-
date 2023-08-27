@@ -62,12 +62,21 @@ export const saveScore = async (req: any, res: any) => {
   try {
     const { name, score } = req.body;
 
+    console.log("Saving score for user:", name, "Score:", score);
+
     const userDB: any = await UserModel.findOne({ name });
 
-    if (!userDB) throw new Error("User not found");
+    if (!userDB) {
+      console.log("User not found:", name);
+      throw new Error("User not found");
+    }
+
+    console.log("User found. Updating score...");
 
     userDB.score = score;
     await userDB.save();
+
+    console.log("Score updated successfully");
 
     res.status(200).send({ success: true });
   } catch (error: any) {

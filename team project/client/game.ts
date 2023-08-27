@@ -1,5 +1,3 @@
-// import { saveScore } from "../../API/userController";
-
 const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 const canvasContext = canvas.getContext("2d");
 
@@ -215,11 +213,15 @@ function saveScore(name: any, score: any) {
   })
     .then((response) => response.json())
     .then((data) => {
+      console.log("Save score response:", data);
       if (data.success) {
         console.log("Score saved successfully");
       } else {
         console.error("Failed to save score");
       }
+    })
+    .catch((error) => {
+      console.error("Error during saveScore:", error);
     });
 }
 
@@ -229,7 +231,8 @@ function stopGame() {
   gameOver = true;
   const gameOverMessage = document.getElementById("gameOverMessage");
   gameOverMessage!.style.display = "block";
-  saveScore("username", score);
+  const username = getCookieValue("user");
+  saveScore(username, score);
   getLeaderboard();
 }
 

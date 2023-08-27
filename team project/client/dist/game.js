@@ -1,4 +1,3 @@
-// import { saveScore } from "../../API/userController";
 var canvas = document.getElementById("gameCanvas");
 var canvasContext = canvas.getContext("2d");
 // pipes section ///
@@ -168,12 +167,15 @@ function saveScore(name, score) {
     })
         .then(function (response) { return response.json(); })
         .then(function (data) {
+        console.log("Save score response:", data);
         if (data.success) {
             console.log("Score saved successfully");
         }
         else {
             console.error("Failed to save score");
         }
+    })["catch"](function (error) {
+        console.error("Error during saveScore:", error);
     });
 }
 var gameOver = false;
@@ -181,7 +183,8 @@ function stopGame() {
     gameOver = true;
     var gameOverMessage = document.getElementById("gameOverMessage");
     gameOverMessage.style.display = "block";
-    saveScore("username", score);
+    var username = getCookieValue("user");
+    saveScore(username, score);
     getLeaderboard();
 }
 function checkCollision() {
