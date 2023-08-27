@@ -96,7 +96,7 @@ let pipeCreationInterval: number | null = null;
 function createPipePairAndSetInterval() {
   createPipePair();
   if (level === 1 && pipeCreationInterval === null) {
-    pipeCreationInterval = setInterval(createPipePair, 3000);
+    pipeCreationInterval = setInterval(createPipePair, 3000) as any;
   }
 }
 
@@ -223,28 +223,11 @@ function saveScore(token: string, score: any): void {
     });
 }
 
-function getCookie(name: string) {
-  const value = "; " + document.cookie;
-  const parts = value.split("; " + name + "=");
-
-  if (parts.length === 2) {
-    const poppedPart = parts.pop();
-    if (poppedPart) {
-      return poppedPart.split(";").shift();
-    }
-  }
-}
-
 function stopGame(): void {
   gameOver = true;
   const gameOverMessage = document.getElementById("gameOverMessage");
   gameOverMessage!.style.display = "block";
-  const userToken = getCookie("user");
-  if (userToken) {
-    saveScore(userToken, score);
-  } else {
-    console.error("User token is not available");
-  }
+  saveScore("delete me", score);
   getLeaderboard();
 }
 

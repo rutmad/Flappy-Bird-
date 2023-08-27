@@ -176,27 +176,11 @@ function saveScore(token, score) {
         }
     });
 }
-function getCookie(name) {
-    var value = "; " + document.cookie;
-    var parts = value.split("; " + name + "=");
-    if (parts.length === 2) {
-        var poppedPart = parts.pop();
-        if (poppedPart) {
-            return poppedPart.split(";").shift();
-        }
-    }
-}
 function stopGame() {
     gameOver = true;
     var gameOverMessage = document.getElementById("gameOverMessage");
     gameOverMessage.style.display = "block";
-    var userToken = getCookie("user");
-    if (userToken) {
-        saveScore(userToken, score);
-    }
-    else {
-        console.error("User token is not available");
-    }
+    saveScore("delete me", score);
     getLeaderboard();
 }
 var gameOver = false;

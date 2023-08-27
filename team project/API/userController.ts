@@ -62,12 +62,19 @@ export const saveScore = async (req: any, res: any) => {
   try {
     const { name, score } = req.body;
 
-    console.log("Saving score for user:", name, "Score:", score);
+    const { user } = req.cookies;
 
-    const userDB: any = await UserModel.findOne({ name });
+    const decoded = jwt.decode(user, secret);
+    console.log(decoded);
+    const { userId, role } = decoded;
+    console.log("Saving score for user:", userId, "Score:", score);
+
+    const userDB: any = await UserModel.findOne({
+      _id: userId,
+    });
 
     if (!userDB) {
-      console.log("User not found:", name);
+      console.log("User not found:", userId);
       throw new Error("User not found");
     }
 

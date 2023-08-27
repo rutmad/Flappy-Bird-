@@ -130,12 +130,14 @@ exports.saveScore = function (req, res) { return __awaiter(void 0, void 0, void 
                 decoded = jwt_simple_1["default"].decode(user, secret);
                 console.log(decoded);
                 userId = decoded.userId, role = decoded.role;
-                console.log("Saving score for user:", name, "Score:", score);
-                return [4 /*yield*/, userModel_1["default"].findOne({ userId: userId })];
+                console.log("Saving score for user:", userId, "Score:", score);
+                return [4 /*yield*/, userModel_1["default"].findOne({
+                        _id: userId
+                    })];
             case 1:
                 userDB = _b.sent();
                 if (!userDB) {
-                    console.log("User not found:", name);
+                    console.log("User not found:", userId);
                     throw new Error("User not found");
                 }
                 console.log("User found. Updating score...");
