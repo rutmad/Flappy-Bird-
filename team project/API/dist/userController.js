@@ -120,14 +120,18 @@ exports.getUser = function (req, res) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 exports.saveScore = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, score, userDB, error_4;
+    var _a, name, score, user, decoded, userId, role, userDB, error_4;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 3, , 4]);
                 _a = req.body, name = _a.name, score = _a.score;
+                user = req.cookies.user;
+                decoded = jwt_simple_1["default"].decode(user, secret);
+                console.log(decoded);
+                userId = decoded.userId, role = decoded.role;
                 console.log("Saving score for user:", name, "Score:", score);
-                return [4 /*yield*/, userModel_1["default"].findOne({ name: name })];
+                return [4 /*yield*/, userModel_1["default"].findOne({ userId: userId })];
             case 1:
                 userDB = _b.sent();
                 if (!userDB) {

@@ -96,7 +96,7 @@ let pipeCreationInterval: number | null = null;
 function createPipePairAndSetInterval() {
   createPipePair();
   if (level === 1 && pipeCreationInterval === null) {
-    pipeCreationInterval = setInterval(createPipePair, 3000);
+    pipeCreationInterval = setInterval(createPipePair, 3000) as any;
   }
 }
 
@@ -190,61 +190,61 @@ function getLeaderboard() {
     });
 }
 
-canvasContext!.fillStyle = "white";
-canvasContext!.font = "24px Arial";
-canvasContext!.fillText("score: " + score, 10, 30);
-function updateScore() {
-  pipePairs.forEach((pipePair) => {
-    const upperPipe = pipePair.upperPipe;
-    if (birdX > upperPipe.x + PIPE_WIDTH && !upperPipe.scored) {
-      const userScore = (score += 1);
-      console.log("Score: ", userScore);
-      upperPipe.scored = true;
-    }
-  });
-}
+// canvasContext!.fillStyle = "white";
+// canvasContext!.font = "24px Arial";
+// canvasContext!.fillText("score: " + score, 10, 30);
+// function updateScore() {
+//   pipePairs.forEach((pipePair) => {
+//     const upperPipe = pipePair.upperPipe;
+//     if (birdX > upperPipe.x + PIPE_WIDTH && !upperPipe.scored) {
+//       const userScore = (score += 1);
+//       console.log("Score: ", userScore);
+//       upperPipe.scored = true;
+//     }
+//   });
+// }
 
-function saveScore(token: string, score: any): void {
-  fetch("/api/saveScore", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ score }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        console.log("Score saved successfully");
-      } else {
-        console.error("Failed to save score");
-      }
-    });
-}
+// function saveScore(token: string, score: any): void {
+//   fetch("/api/saveScore", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`,
+//     },
+//     body: JSON.stringify({ score }),
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if (data.success) {
+//         console.log("Score saved successfully");
+//       } else {
+//         console.error("Failed to save score");
+//       }
+//     });
+// }
 
-function getCookie(name: string) {
-  const value = "; " + document.cookie;
-  const parts = value.split("; " + name + "=");
+// function getCookie(name: string) {
+//   const value = "; " + document.cookie;
+//   const parts = value.split("; " + name + "=");
 
-  if (parts.length === 2) {
-    const poppedPart = parts.pop();
-    if (poppedPart) {
-      return poppedPart.split(";").shift();
-    }
-  }
-}
+//   if (parts.length === 2) {
+//     const poppedPart = parts.pop();
+//     if (poppedPart) {
+//       return poppedPart.split(";").shift();
+//     }
+//   }
+// }
 
 function stopGame(): void {
   gameOver = true;
   const gameOverMessage = document.getElementById("gameOverMessage");
   gameOverMessage!.style.display = "block";
-  const userToken = getCookie("user");
-  if (userToken) {
-    saveScore(userToken, score);
-  } else {
-    console.error("User token is not available");
-  }
+  //   const userToken = getCookie("user");
+  //   if (userToken) {
+  //     saveScore(userToken, score);
+  //   } else {
+  //     console.error("User token is not available");
+  //   }
   getLeaderboard();
 }
 
@@ -321,7 +321,6 @@ function gameLoop() {
     movePipes();
     drawBird();
     drawPipes();
-    updateScore();
     removePipes();
     checkCollision();
     updateLevel();

@@ -144,59 +144,57 @@ function getLeaderboard() {
         console.error(error);
     });
 }
-canvasContext.fillStyle = "white";
-canvasContext.font = "24px Arial";
-canvasContext.fillText("score: " + score, 10, 30);
-function updateScore() {
-    pipePairs.forEach(function (pipePair) {
-        var upperPipe = pipePair.upperPipe;
-        if (birdX > upperPipe.x + PIPE_WIDTH && !upperPipe.scored) {
-            var userScore = (score += 1);
-            console.log("Score: ", userScore);
-            upperPipe.scored = true;
-        }
-    });
-}
-function saveScore(token, score) {
-    fetch("/api/saveScore", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token
-        },
-        body: JSON.stringify({ score: score })
-    })
-        .then(function (response) { return response.json(); })
-        .then(function (data) {
-        if (data.success) {
-            console.log("Score saved successfully");
-        }
-        else {
-            console.error("Failed to save score");
-        }
-    });
-}
-function getCookie(name) {
-    var value = "; " + document.cookie;
-    var parts = value.split("; " + name + "=");
-    if (parts.length === 2) {
-        var poppedPart = parts.pop();
-        if (poppedPart) {
-            return poppedPart.split(";").shift();
-        }
-    }
-}
+// canvasContext!.fillStyle = "white";
+// canvasContext!.font = "24px Arial";
+// canvasContext!.fillText("score: " + score, 10, 30);
+// function updateScore() {
+//   pipePairs.forEach((pipePair) => {
+//     const upperPipe = pipePair.upperPipe;
+//     if (birdX > upperPipe.x + PIPE_WIDTH && !upperPipe.scored) {
+//       const userScore = (score += 1);
+//       console.log("Score: ", userScore);
+//       upperPipe.scored = true;
+//     }
+//   });
+// }
+// function saveScore(token: string, score: any): void {
+//   fetch("/api/saveScore", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`,
+//     },
+//     body: JSON.stringify({ score }),
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if (data.success) {
+//         console.log("Score saved successfully");
+//       } else {
+//         console.error("Failed to save score");
+//       }
+//     });
+// }
+// function getCookie(name: string) {
+//   const value = "; " + document.cookie;
+//   const parts = value.split("; " + name + "=");
+//   if (parts.length === 2) {
+//     const poppedPart = parts.pop();
+//     if (poppedPart) {
+//       return poppedPart.split(";").shift();
+//     }
+//   }
+// }
 function stopGame() {
     gameOver = true;
     var gameOverMessage = document.getElementById("gameOverMessage");
     gameOverMessage.style.display = "block";
-    var userToken = getCookie("user");
-    if (userToken) {
-        saveScore(userToken, score);
-    }
-    else {
-        console.error("User token is not available");
-    }
+    //   const userToken = getCookie("user");
+    //   if (userToken) {
+    //     saveScore(userToken, score);
+    //   } else {
+    //     console.error("User token is not available");
+    //   }
     getLeaderboard();
 }
 var gameOver = false;
@@ -264,7 +262,6 @@ function gameLoop() {
         movePipes();
         drawBird();
         drawPipes();
-        updateScore();
         removePipes();
         checkCollision();
         updateLevel();
