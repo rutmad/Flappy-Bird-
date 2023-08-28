@@ -21,9 +21,35 @@
       </canvas>
     </div>
 
-    <div id="gameOverMessage" style="display: none">Game Over</div>
+    <div id="gameOverMessage" style="display: none">
+      <div id="gameOver">game over</div>
+      <div id="gameOverResult"></div>
+      <div id="gameOverButtons">
+        <button id="restartButton">Restart Game</button>
+        <button id="leaderboardButton">View Leaderboard</button>
+      </div>
+    </div>
     <div id="levelMessage" class="level2Message" style="display: none">
       great - level 2
+    </div>
+    <div id="leaderboardModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" id="closeLeaderboardModal">&times;</span>
+        <h2 class="centered" style="font-size: x-large">Leaderboard</h2>
+        <div id="leaderboardContainer" class="centered">
+          <table id="leaderboardList">
+            <thead>
+              <tr>
+                <th></th>
+                <th>User</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <button id="restartButtonLeaderboard">Restart</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>

@@ -67,7 +67,6 @@ export const saveScore = async (req: any, res: any) => {
     const decoded = jwt.decode(user, secret);
     console.log(decoded);
     const { userId, role } = decoded;
-    console.log("Saving score for user:", userId, "Score:", score);
 
     const userDB: any = await UserModel.findOne({
       _id: userId,

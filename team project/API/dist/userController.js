@@ -130,7 +130,6 @@ exports.saveScore = function (req, res) { return __awaiter(void 0, void 0, void 
                 decoded = jwt_simple_1["default"].decode(user, secret);
                 console.log(decoded);
                 userId = decoded.userId, role = decoded.role;
-                console.log("Saving score for user:", userId, "Score:", score);
                 return [4 /*yield*/, userModel_1["default"].findOne({
                         _id: userId
                     })];

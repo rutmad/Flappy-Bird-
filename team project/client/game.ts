@@ -223,12 +223,169 @@ function saveScore(token: string, score: any): void {
     });
 }
 
-function stopGame(): void {
+// function stopGame(): void {
+//   gameOver = true;
+//   const gameOverMessage = document.getElementById("gameOverMessage");
+//   gameOverMessage!.style.display = "block";
+//   saveScore("delete me", score);
+//   getLeaderboard();
+// }
+
+function openLeaderboardModal() {
+  try {
+    const modal = document.getElementById("leaderboardModal");
+    const closeBtn = document.getElementById("closeLeaderboardModal");
+    const leaderboardTableBody = document.querySelector(
+      "#leaderboardList tbody"
+    );
+
+    fetch("/api/leaderboard")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!leaderboardTableBody) {
+          throw new Error("there is no leaderboardTableBody");
+        }
+
+        leaderboardTableBody.innerHTML = "";
+        data.leaderboard.forEach((entry, index) => {
+          const row = document.createElement("tr");
+          const rankCell = document.createElement("td");
+          const nameCell = document.createElement("td");
+          const scoreCell = document.createElement("td");
+
+          rankCell.textContent = (index + 1).toString();
+          nameCell.textContent = entry.name;
+          scoreCell.textContent = entry.score.toString();
+
+          row.appendChild(rankCell);
+          row.appendChild(nameCell);
+          row.appendChild(scoreCell);
+
+          leaderboardTableBody.appendChild(row);
+        });
+
+        if (!modal) {
+          throw new Error("there is no modal");
+        }
+        modal.style.display = "block";
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    if (!closeBtn) {
+      throw new Error("there is no closeBtn");
+    }
+    closeBtn.addEventListener("click", () => {
+      if (!modal) {
+        throw new Error("there is no modal");
+      }
+      modal.style.display = "none";
+    });
+
+    const restartButtonLeaderboard = document.getElementById(
+      "restartButtonLeaderboard"
+    );
+    if (restartButtonLeaderboard) {
+      restartButtonLeaderboard.addEventListener("click", () => {
+        location.reload();
+      });
+    }
+
+    window.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        if (!modal) {
+          throw new Error("there is no modal");
+        }
+        modal.style.display = "none";
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// function openLeaderboardModal() {
+//   try {
+//     const modal = document.getElementById("leaderboardModal");
+//     const closeBtn = document.getElementById("closeLeaderboardModal");
+//     const leaderboardList = document.getElementById("leaderboardList");
+
+//     fetch("/api/leaderboard")
+//       .then((res) => res.json())
+//       .then((data) => {
+//         if (!leaderboardList) {
+//           throw new Error("there is no leaderboardList");
+//         }
+//         leaderboardList.innerHTML = "";
+//         data.leaderboard.forEach((entry) => {
+//           const listItem = document.createElement("li");
+//           listItem.textContent = `${entry.name}: ${entry.score}`;
+//           leaderboardList.appendChild(listItem);
+//         });
+//         if (!modal) {
+//           throw new Error("there is no modal");
+//         }
+//         modal.style.display = "block";
+//       })
+//       .catch((error) => {
+//         console.error(error);
+//       });
+//     if (!closeBtn) {
+//       throw new Error("there is no closeBtn");
+//     }
+//     closeBtn.addEventListener("click", () => {
+//       if (!modal) {
+//         throw new Error("there is no modal");
+//       }
+//       modal.style.display = "none";
+//     });
+
+//     const restartButtonLeaderboard = document.getElementById(
+//       "restartButtonLeaderboard"
+//     );
+//     if (restartButtonLeaderboard) {
+//       restartButtonLeaderboard.addEventListener("click", () => {
+//         location.reload();
+//       });
+//     }
+
+//     window.addEventListener("click", (event) => {
+//       if (event.target === modal) {
+//         if (!modal) {
+//           throw new Error("there is no modal");
+//         }
+//         modal.style.display = "none";
+//       }
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+function stopGame() {
   gameOver = true;
   const gameOverMessage = document.getElementById("gameOverMessage");
+
+  const scoreDisplay = document.getElementById("gameOverResult");
+  if (scoreDisplay) {
+    scoreDisplay.textContent = "Your Score: " + score;
+  }
+
+  const restartButton = document.getElementById("restartButton");
+  if (restartButton) {
+    restartButton.addEventListener("click", () => {
+      location.reload();
+    });
+  }
+  const leaderboardButton = document.getElementById("leaderboardButton");
+  if (leaderboardButton) {
+    leaderboardButton.addEventListener("click", () => {
+      openLeaderboardModal();
+    });
+  }
+
   gameOverMessage!.style.display = "block";
   saveScore("delete me", score);
-  getLeaderboard();
 }
 
 let gameOver = false;
