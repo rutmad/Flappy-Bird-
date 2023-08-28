@@ -78,10 +78,10 @@ export const saveScore = async (req: any, res: any) => {
       throw new Error("User not found");
     }
 
-    console.log("User found. Updating score...");
-
-    userDB.score = score;
-    await userDB.save();
+    if (userDB.score < score) {
+      userDB.score = score;
+      await userDB.save();
+    }
 
     console.log("Score updated successfully");
 
